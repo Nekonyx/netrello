@@ -1,0 +1,211 @@
+/* eslint-disable */
+/* tslint:disable */
+/*
+ * ---------------------------------------------------------------
+ * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
+ * ##                                                           ##
+ * ## AUTHOR: acacode                                           ##
+ * ## SOURCE: https://github.com/acacode/swagger-typescript-api ##
+ * ---------------------------------------------------------------
+ */
+
+import { CustomField, PosStringOrNumber, TrelloID } from './data-contracts'
+import { ContentType, HttpClient, IRequestParams } from './http-client'
+
+export class CustomFields {
+  protected readonly client: HttpClient
+
+  public constructor(client: HttpClient) {
+    this.client = client
+  }
+
+  /**
+   * Create a new Custom Field on a board.
+   *
+   * @name PostCustomfields
+   * @summary Create a new Custom Field on a Board
+   * @request POST:/customFields
+   * @secure
+   */
+  public async postCustomfields(
+    data: {
+      /** The ID of the model for which the Custom Field is being defined. This should always be the ID of a board. */
+      idModel: TrelloID
+      /** The type of model that the Custom Field is being defined on. This should always be `board`. */
+      modelType: 'board'
+      /** The name of the Custom Field */
+      name: string
+      /** The type of Custom Field to create. */
+      type: 'checkbox' | 'list' | 'number' | 'text' | 'date'
+      /** If the type is `checkbox`  */
+      options?: string
+      pos: PosStringOrNumber
+      /**
+       * Whether this Custom Field should be shown on the front of Cards
+       * @default true
+       */
+      display_cardFront?: boolean
+    },
+    params: IRequestParams = {}
+  ): Promise<CustomField> {
+    return this.client.request<CustomField>({
+      path: `/customFields`,
+      method: 'POST',
+      body: data,
+      secure: true,
+      type: ContentType.Json,
+      ...params
+    })
+  }
+
+  /**
+   * No description
+   *
+   * @name GetCustomfieldsId
+   * @summary Get a Custom Field
+   * @request GET:/customFields/{id}
+   * @secure
+   */
+  public async getCustomfieldsId(
+    id: TrelloID,
+    params: IRequestParams = {}
+  ): Promise<CustomField> {
+    return this.client.request<CustomField>({
+      path: `/customFields/${id}`,
+      method: 'GET',
+      secure: true,
+      ...params
+    })
+  }
+
+  /**
+   * Update a Custom Field definition.
+   *
+   * @name PutCustomfieldsId
+   * @summary Update a Custom Field definition
+   * @request PUT:/customFields/{id}
+   * @secure
+   */
+  public async putCustomfieldsId(
+    id: TrelloID,
+    data: {
+      /** The name of the Custom Field */
+      name?: string
+      pos?: PosStringOrNumber
+      /** Whether to display this custom field on the front of cards */
+      'display/cardFront'?: boolean
+    },
+    params: IRequestParams = {}
+  ): Promise<CustomField> {
+    return this.client.request<CustomField>({
+      path: `/customFields/${id}`,
+      method: 'PUT',
+      body: data,
+      secure: true,
+      type: ContentType.Json,
+      ...params
+    })
+  }
+
+  /**
+   * Delete a Custom Field from a board.
+   *
+   * @name DeleteCustomfieldsId
+   * @summary Delete a Custom Field definition
+   * @request DELETE:/customFields/{id}
+   * @secure
+   */
+  public async deleteCustomfieldsId(
+    id: TrelloID,
+    params: IRequestParams = {}
+  ): Promise<void> {
+    return this.client.request<void>({
+      path: `/customFields/${id}`,
+      method: 'DELETE',
+      secure: true,
+      ...params
+    })
+  }
+
+  /**
+   * Add an option to a dropdown Custom Field
+   *
+   * @name GetCustomfieldsIdOptions
+   * @summary Add Option to Custom Field dropdown
+   * @request POST:/customFields/{id}/options
+   * @secure
+   */
+  public async getCustomfieldsIdOptions(
+    id: TrelloID,
+    params: IRequestParams = {}
+  ): Promise<void> {
+    return this.client.request<void>({
+      path: `/customFields/${id}/options`,
+      method: 'POST',
+      secure: true,
+      ...params
+    })
+  }
+
+  /**
+   * Get the options of a drop down Custom Field
+   *
+   * @name PostCustomfieldsIdOptions
+   * @summary Get Options of Custom Field drop down
+   * @request GET:/customFields/{id}/options
+   * @secure
+   */
+  public async postCustomfieldsIdOptions(
+    id: TrelloID,
+    params: IRequestParams = {}
+  ): Promise<void> {
+    return this.client.request<void>({
+      path: `/customFields/${id}/options`,
+      method: 'GET',
+      secure: true,
+      ...params
+    })
+  }
+
+  /**
+   * Retrieve a specific, existing Option on a given dropdown-type Custom Field
+   *
+   * @name GetCustomfieldsOptionsIdcustomfieldoption
+   * @summary Get Option of Custom Field dropdown
+   * @request GET:/customFields/{id}/options/{idCustomFieldOption}
+   * @secure
+   */
+  public async getCustomfieldsOptionsIdcustomfieldoption(
+    id: TrelloID,
+    idCustomFieldOption: TrelloID,
+    params: IRequestParams = {}
+  ): Promise<void> {
+    return this.client.request<void>({
+      path: `/customFields/${id}/options/${idCustomFieldOption}`,
+      method: 'GET',
+      secure: true,
+      ...params
+    })
+  }
+
+  /**
+   * Delete an option from a Custom Field dropdown.
+   *
+   * @name DeleteCustomfieldsOptionsIdcustomfieldoption
+   * @summary Delete Option of Custom Field dropdown
+   * @request DELETE:/customFields/{id}/options/{idCustomFieldOption}
+   * @secure
+   */
+  public async deleteCustomfieldsOptionsIdcustomfieldoption(
+    id: TrelloID,
+    idCustomFieldOption: TrelloID,
+    params: IRequestParams = {}
+  ): Promise<void> {
+    return this.client.request<void>({
+      path: `/customFields/${id}/options/${idCustomFieldOption}`,
+      method: 'DELETE',
+      secure: true,
+      ...params
+    })
+  }
+}

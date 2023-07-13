@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "outDir": "lib",
+    "target": "es2022",
+    "module": "commonjs",
+    "skipLibCheck": true
+  },
+  "ts-node": {
+    "transpileOnly": true
+  },
+  "include": ["codegen", "src"]
+}

@@ -1,0 +1,139 @@
+<%
+const { apiConfig, generateResponses, config } = it;
+%>
+
+export interface IFullRequestParams extends Omit<RequestInit, "body"> {
+  /** set parameter to `true` for call `securityWorker` for this request */
+  secure?: boolean;
+  /** request path */
+  path: string;
+  /** content type of request body */
+  type?: ContentType;
+  /** query params */
+  query?: Record<string, any>;
+  /** request body */
+  body?: unknown;
+  /** base url */
+  baseUrl?: string;
+  /** abort signal */
+  signal?: AbortSignal
+}
+
+export interface IRequestParams extends Omit<IFullRequestParams, "body" | "method" | "query" | "path"> {}
+
+export interface ICustomFetch {
+    (input: RequestInfo | URL, init?: RequestInit): Promise<Response>
+}
+
+export interface IHttpClientOptions {
+    key: string;
+    token: string;
+    baseUrl?: string;
+    baseApiParams?: Omit<IRequestParams, "baseUrl" | "signal">;
+    customFetch?: ICustomFetch;
+}
+
+export enum ContentType {
+    Json = "application/json",
+    FormData = "multipart/form-data",
+    UrlEncoded = "application/x-www-form-urlencoded",
+    Text = "text/plain",
+}
+
+export function formatBody(type: ContentType, input: any): any {
+    switch (type) {
+        case ContentType.Json: {
+            return input !== null && (typeof input === 'object' || typeof input === 'string')
+                ? JSON.stringify(input)
+                : input;
+        }
+
+        case ContentType.Text: {
+            return input !== null && typeof input !== 'string'
+                ? JSON.stringify(input)
+                : input;
+        }
+
+        case ContentType.FormData: {
+            const formData = new FormData()
+
+            if (input) {
+                for (const [key, value] of Object.entries(input)) {
+                    formData.set(
+                        key,
+                        value instanceof Blob
+                            ? value
+                            : typeof value === 'object' && value !== null
+                                ? JSON.stringify(value)
+                                : `${value}`
+                    );
+                }
+            }
+
+            return formData;
+        }
+
+        case ContentType.UrlEncoded: {
+            return new URLSearchParams(input).toString();
+        }
+    }
+}
+
+export class HttpClient {
+    public baseUrl: string;
+    public key: string;
+    public token: string;
+    private readonly customFetch: ICustomFetch;
+    private readonly baseApiParams: Omit<IRequestParams, "baseUrl" | "signal">;
+
+    public constructor(opts: IHttpClientOptions) {
+        this.key = opts.key;
+        this.token = opts.token;
+        this.baseUrl = opts.baseUrl ?? "<%~ apiConfig.baseUrl %>";
+        this.baseApiParams = opts.baseApiParams ?? {};
+        this.customFetch = opts.customFetch ?? fetch;
+    }
+
+    public async request<T = any>({
+        baseUrl,
+        path,
+        secure,
+        signal,
+        body,
+        query,
+        type = ContentType.Json,
+        ...params
+    }: IFullRequestParams): Promise<T> {
+        // remove slash
+        path = path[0] === '/' ? path.slice(1) : path
+        const url = new URL(`${baseUrl ?? this.baseUrl}/${path}`);
+
+        if (secure) {
+            url.searchParams.set('key', this.key);
+            url.searchParams.set('token', this.token);
+        }
+
+        if (query) {
+          for (const [key, value] of Object.entries(query)) {
+            url.searchParams.set(key, String(value));
+          }
+        }
+
+        const response = await this.customFetch(url, {
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+            ...this.baseApiParams,
+            signal,
+            ...params,
+            headers: {
+                ...(params.headers || {}),
+                ...(type && type !== ContentType.FormData ? { "Content-Type": type } : {}),
+            },
+            body: typeof body === "undefined" || body === null
+                ? null
+                : formatBody(type, body),
+        })
+
+        return response.json()
+    };
+}
