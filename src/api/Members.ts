@@ -11,23 +11,23 @@
 
 import {
   BlockedKey,
-  Board,
-  BoardBackground,
   BoardFields,
-  BoardStars,
-  Card,
   Channel,
-  CustomEmoji,
-  CustomSticker,
-  Member,
+  IBoard,
+  IBoardBackground,
+  IBoardStars,
+  ICard,
+  ICustomEmoji,
+  ICustomSticker,
+  IMember,
+  INotification,
+  INotificationChannelSettings,
+  IOrganization,
+  IPosStringOrNumber,
+  ISavedSearch,
+  IToken,
   MemberFields,
-  Notification,
-  NotificationChannelSettings,
-  Organization,
   OrganizationFields,
-  PosStringOrNumber,
-  SavedSearch,
-  Token,
   TrelloID
 } from './data-contracts'
 import { ContentType, HttpClient, IRequestParams } from './http-client'
@@ -42,12 +42,12 @@ export class Members {
   /**
    * Get a member
    *
-   * @name GetMembersId
+   * @name Get
    * @summary Get a Member
    * @request GET:/members/{id}
    * @secure
    */
-  public async getMembersId(
+  public async get(
     id: TrelloID | string,
     query?: {
       /** See the [Actions Nested Resource](/cloud/trello/guides/rest-api/nested-resources/#actions-nested-resource) */
@@ -146,8 +146,8 @@ export class Members {
       tokens?: 'all' | 'none'
     },
     params: IRequestParams = {}
-  ): Promise<Member> {
-    return this.client.request<Member>({
+  ): Promise<IMember> {
+    return this.client.request<IMember>({
       path: `/members/${id}`,
       method: 'GET',
       query: query,
@@ -159,12 +159,12 @@ export class Members {
   /**
    * Update a Member
    *
-   * @name PutMembersId
+   * @name Update
    * @summary Update a Member
    * @request PUT:/members/{id}
    * @secure
    */
-  public async putMembersId(
+  public async update(
     id: TrelloID,
     query?: {
       /** New name for the member. Cannot begin or end with a space. */
@@ -189,8 +189,8 @@ export class Members {
       'prefs/minutesBetweenSummaries'?: number
     },
     params: IRequestParams = {}
-  ): Promise<Member> {
-    return this.client.request<Member>({
+  ): Promise<IMember> {
+    return this.client.request<IMember>({
       path: `/members/${id}`,
       method: 'PUT',
       query: query,
@@ -202,17 +202,17 @@ export class Members {
   /**
    * Get a particular property of a member
    *
-   * @name GetMembersIdField
+   * @name GetField
    * @summary Get a field on a Member
    * @request GET:/members/{id}/{field}
    * @secure
    */
-  public async getMembersIdField(
+  public async getField(
     id: TrelloID,
     field: MemberFields,
     params: IRequestParams = {}
-  ): Promise<Member> {
-    return this.client.request<Member>({
+  ): Promise<IMember> {
+    return this.client.request<IMember>({
       path: `/members/${id}/${field}`,
       method: 'GET',
       secure: true,
@@ -223,20 +223,20 @@ export class Members {
   /**
    * List the actions for a member
    *
-   * @name GetMembersIdActions
+   * @name GetActions
    * @summary Get a Member's Actions
    * @request GET:/members/{id}/actions
    * @secure
    */
-  public async getMembersIdActions(
+  public async getActions(
     id: TrelloID,
     query?: {
       /** A comma-separated list of [action types](https://developer.atlassian.com/cloud/trello/guides/rest-api/action-types/). */
       filter?: string
     },
     params: IRequestParams = {}
-  ): Promise<Member[]> {
-    return this.client.request<Member[]>({
+  ): Promise<IMember[]> {
+    return this.client.request<IMember[]>({
       path: `/members/${id}/actions`,
       method: 'GET',
       query: query,
@@ -248,12 +248,12 @@ export class Members {
   /**
    * Get a member's custom board backgrounds
    *
-   * @name GetMembersIdBoardbackgrounds
+   * @name GetBoardBackgrounds
    * @summary Get Member's custom Board backgrounds
    * @request GET:/members/{id}/boardBackgrounds
    * @secure
    */
-  public async getMembersIdBoardbackgrounds(
+  public async getBoardBackgrounds(
     id: TrelloID,
     query?: {
       /**
@@ -263,8 +263,8 @@ export class Members {
       filter?: 'all' | 'custom' | 'default' | 'none' | 'premium'
     },
     params: IRequestParams = {}
-  ): Promise<BoardBackground[]> {
-    return this.client.request<BoardBackground[]>({
+  ): Promise<IBoardBackground[]> {
+    return this.client.request<IBoardBackground[]>({
       path: `/members/${id}/boardBackgrounds`,
       method: 'GET',
       query: query,
@@ -276,20 +276,20 @@ export class Members {
   /**
    * Upload a new boardBackground
    *
-   * @name PostMembersIdBoardbackgrounds1
+   * @name CreateBoardBackgrounds
    * @summary Upload new boardBackground for Member
    * @request POST:/members/{id}/boardBackgrounds
    * @secure
    */
-  public async postMembersIdBoardbackgrounds1(
+  public async createBoardBackgrounds(
     id: TrelloID,
     query: {
       /** @format binary */
       file: File
     },
     params: IRequestParams = {}
-  ): Promise<BoardBackground[]> {
-    return this.client.request<BoardBackground[]>({
+  ): Promise<IBoardBackground[]> {
+    return this.client.request<IBoardBackground[]>({
       path: `/members/${id}/boardBackgrounds`,
       method: 'POST',
       query: query,
@@ -301,12 +301,12 @@ export class Members {
   /**
    * Get a member's board background
    *
-   * @name GetMembersIdBoardbackgroundsIdbackground
+   * @name GetBoardBackgroundsIdBackground
    * @summary Get a boardBackground of a Member
    * @request GET:/members/{id}/boardBackgrounds/{idBackground}
    * @secure
    */
-  public async getMembersIdBoardbackgroundsIdbackground(
+  public async getBoardBackgroundsIdBackground(
     id: TrelloID,
     idBackground: TrelloID,
     query?: {
@@ -317,8 +317,8 @@ export class Members {
       fields?: 'all' | 'brightness' | 'fullSizeUrl' | 'scaled' | 'tile'
     },
     params: IRequestParams = {}
-  ): Promise<BoardBackground> {
-    return this.client.request<BoardBackground>({
+  ): Promise<IBoardBackground> {
+    return this.client.request<IBoardBackground>({
       path: `/members/${id}/boardBackgrounds/${idBackground}`,
       method: 'GET',
       query: query,
@@ -330,12 +330,12 @@ export class Members {
   /**
    * Update a board background
    *
-   * @name PutMembersIdBoardbackgroundsIdbackground
+   * @name UpdateBoardBackgroundsIdBackground
    * @summary Update a Member's custom Board background
    * @request PUT:/members/{id}/boardBackgrounds/{idBackground}
    * @secure
    */
-  public async putMembersIdBoardbackgroundsIdbackground(
+  public async updateBoardBackgroundsIdBackground(
     id: TrelloID,
     idBackground: TrelloID,
     query?: {
@@ -345,8 +345,8 @@ export class Members {
       tile?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<BoardBackground> {
-    return this.client.request<BoardBackground>({
+  ): Promise<IBoardBackground> {
+    return this.client.request<IBoardBackground>({
       path: `/members/${id}/boardBackgrounds/${idBackground}`,
       method: 'PUT',
       query: query,
@@ -358,12 +358,12 @@ export class Members {
   /**
    * Delete a board background
    *
-   * @name DeleteMembersIdBoardbackgroundsIdbackground
+   * @name DeleteBoardBackgroundsIdBackground
    * @summary Delete a Member's custom Board background
    * @request DELETE:/members/{id}/boardBackgrounds/{idBackground}
    * @secure
    */
-  public async deleteMembersIdBoardbackgroundsIdbackground(
+  public async deleteBoardBackgroundsIdBackground(
     id: TrelloID,
     idBackground: TrelloID,
     params: IRequestParams = {}
@@ -379,12 +379,12 @@ export class Members {
   /**
    * List a member's board stars
    *
-   * @name GetMembersIdBoardstars
+   * @name GetBoardStars
    * @summary Get a Member's boardStars
    * @request GET:/members/{id}/boardStars
    * @secure
    */
-  public async getMembersIdBoardstars(
+  public async getBoardStars(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -399,22 +399,22 @@ export class Members {
   /**
    * Star a new board on behalf of a Member
    *
-   * @name PostMembersIdBoardstars
+   * @name CreateBoardStars
    * @summary Create Star for Board
    * @request POST:/members/{id}/boardStars
    * @secure
    */
-  public async postMembersIdBoardstars(
+  public async createBoardStars(
     id: TrelloID | string,
     query: {
       /** The ID of the board to star */
       idBoard: TrelloID
       /** The position of the newly starred board. `top`, `bottom`, or a positive float. */
-      pos: PosStringOrNumber
+      pos: IPosStringOrNumber
     },
     params: IRequestParams = {}
-  ): Promise<BoardStars[]> {
-    return this.client.request<BoardStars[]>({
+  ): Promise<IBoardStars[]> {
+    return this.client.request<IBoardStars[]>({
       path: `/members/${id}/boardStars`,
       method: 'POST',
       query: query,
@@ -426,17 +426,17 @@ export class Members {
   /**
    * Get a specific boardStar
    *
-   * @name GetMembersIdBoardstarsIdstar
+   * @name GetBoardStarsIdStar
    * @summary Get a boardStar of Member
    * @request GET:/members/{id}/boardStars/{idStar}
    * @secure
    */
-  public async getMembersIdBoardstarsIdstar(
+  public async getBoardStarsIdStar(
     id: TrelloID,
     idStar: TrelloID,
     params: IRequestParams = {}
-  ): Promise<BoardStars> {
-    return this.client.request<BoardStars>({
+  ): Promise<IBoardStars> {
+    return this.client.request<IBoardStars>({
       path: `/members/${id}/boardStars/${idStar}`,
       method: 'GET',
       secure: true,
@@ -447,17 +447,17 @@ export class Members {
   /**
    * Update the position of a starred board
    *
-   * @name PutMembersIdBoardstarsIdstar
+   * @name UpdateBoardStarsIdStar
    * @summary Update the position of a boardStar of Member
    * @request PUT:/members/{id}/boardStars/{idStar}
    * @secure
    */
-  public async putMembersIdBoardstarsIdstar(
+  public async updateBoardStarsIdStar(
     id: TrelloID,
     idStar: TrelloID,
     query?: {
       /** New position for the starred board. `top`, `bottom`, or a positive float. */
-      pos?: PosStringOrNumber
+      pos?: IPosStringOrNumber
     },
     params: IRequestParams = {}
   ): Promise<void> {
@@ -473,12 +473,12 @@ export class Members {
   /**
    * Unstar a board
    *
-   * @name DeleteMembersIdBoardstarsIdstar
+   * @name DeleteBoardStarsIdStar
    * @summary Delete Star for Board
    * @request DELETE:/members/{id}/boardStars/{idStar}
    * @secure
    */
-  public async deleteMembersIdBoardstarsIdstar(
+  public async deleteBoardStarsIdStar(
     id: TrelloID,
     idStar: TrelloID,
     params: IRequestParams = {}
@@ -494,12 +494,12 @@ export class Members {
   /**
    * Lists the boards that the user is a member of.
    *
-   * @name GetMembersIdBoards
+   * @name GetBoards
    * @summary Get Boards that Member belongs to
    * @request GET:/members/{id}/boards
    * @secure
    */
-  public async getMembersIdBoards(
+  public async getBoards(
     id: TrelloID,
     query?: {
       /**
@@ -536,8 +536,8 @@ export class Members {
       organization_fields?: OrganizationFields
     },
     params: IRequestParams = {}
-  ): Promise<Board[]> {
-    return this.client.request<Board[]>({
+  ): Promise<IBoard[]> {
+    return this.client.request<IBoard[]>({
       path: `/members/${id}/boards`,
       method: 'GET',
       query: query,
@@ -549,12 +549,12 @@ export class Members {
   /**
    * Get the boards the member has been invited to
    *
-   * @name GetMembersIdBoardsinvited
+   * @name GetBoardsInvited
    * @summary Get Boards the Member has been invited to
    * @request GET:/members/{id}/boardsInvited
    * @secure
    */
-  public async getMembersIdBoardsinvited(
+  public async getBoardsInvited(
     id: TrelloID,
     query?: {
       /**
@@ -564,8 +564,8 @@ export class Members {
       fields?: BoardFields
     },
     params: IRequestParams = {}
-  ): Promise<Board[]> {
-    return this.client.request<Board[]>({
+  ): Promise<IBoard[]> {
+    return this.client.request<IBoard[]>({
       path: `/members/${id}/boardsInvited`,
       method: 'GET',
       query: query,
@@ -577,12 +577,12 @@ export class Members {
   /**
    * Gets the cards a member is on
    *
-   * @name GetMembersIdCards
+   * @name GetCards
    * @summary Get Cards the Member is on
    * @request GET:/members/{id}/cards
    * @secure
    */
-  public async getMembersIdCards(
+  public async getCards(
     id: TrelloID,
     query?: {
       /**
@@ -592,8 +592,8 @@ export class Members {
       filter?: 'all' | 'closed' | 'none' | 'open' | 'visible'
     },
     params: IRequestParams = {}
-  ): Promise<Card[]> {
-    return this.client.request<Card[]>({
+  ): Promise<ICard[]> {
+    return this.client.request<ICard[]>({
       path: `/members/${id}/cards`,
       method: 'GET',
       query: query,
@@ -605,16 +605,16 @@ export class Members {
   /**
    * Get a member's custom board backgrounds
    *
-   * @name GetMembersIdCustomboardbackgrounds
+   * @name GetCustomBoardBackgrounds
    * @summary Get a Member's custom Board Backgrounds
    * @request GET:/members/{id}/customBoardBackgrounds
    * @secure
    */
-  public async getMembersIdCustomboardbackgrounds(
+  public async getCustomBoardBackgrounds(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<BoardBackground[]> {
-    return this.client.request<BoardBackground[]>({
+  ): Promise<IBoardBackground[]> {
+    return this.client.request<IBoardBackground[]>({
       path: `/members/${id}/customBoardBackgrounds`,
       method: 'GET',
       secure: true,
@@ -625,20 +625,20 @@ export class Members {
   /**
    * Upload a new custom board background
    *
-   * @name Membersidcustomboardbackgrounds1
+   * @name CreateCustomBoardBackgrounds
    * @summary Create a new custom Board Background
    * @request POST:/members/{id}/customBoardBackgrounds
    * @secure
    */
-  public async membersidcustomboardbackgrounds1(
+  public async createCustomBoardBackgrounds(
     id: TrelloID,
     query: {
       /** @format binary */
       file: File
     },
     params: IRequestParams = {}
-  ): Promise<BoardBackground> {
-    return this.client.request<BoardBackground>({
+  ): Promise<IBoardBackground> {
+    return this.client.request<IBoardBackground>({
       path: `/members/${id}/customBoardBackgrounds`,
       method: 'POST',
       query: query,
@@ -650,17 +650,17 @@ export class Members {
   /**
    * Get a specific custom board background
    *
-   * @name GetMembersIdCustomboardbackgroundsIdbackground
+   * @name GetCustomBoardBackgroundsIdBackground
    * @summary Get custom Board Background of Member
    * @request GET:/members/{id}/customBoardBackgrounds/{idBackground}
    * @secure
    */
-  public async getMembersIdCustomboardbackgroundsIdbackground(
+  public async getCustomBoardBackgroundsIdBackground(
     id: TrelloID | string,
     idBackground: TrelloID,
     params: IRequestParams = {}
-  ): Promise<BoardBackground> {
-    return this.client.request<BoardBackground>({
+  ): Promise<IBoardBackground> {
+    return this.client.request<IBoardBackground>({
       path: `/members/${id}/customBoardBackgrounds/${idBackground}`,
       method: 'GET',
       secure: true,
@@ -671,12 +671,12 @@ export class Members {
   /**
    * Update a specific custom board background
    *
-   * @name PutMembersIdCustomboardbackgroundsIdbackground
+   * @name UpdateCustomBoardBackgroundsIdBackground
    * @summary Update custom Board Background of Member
    * @request PUT:/members/{id}/customBoardBackgrounds/{idBackground}
    * @secure
    */
-  public async putMembersIdCustomboardbackgroundsIdbackground(
+  public async updateCustomBoardBackgroundsIdBackground(
     id: TrelloID | string,
     idBackground: TrelloID,
     query?: {
@@ -686,8 +686,8 @@ export class Members {
       tile?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<BoardBackground> {
-    return this.client.request<BoardBackground>({
+  ): Promise<IBoardBackground> {
+    return this.client.request<IBoardBackground>({
       path: `/members/${id}/customBoardBackgrounds/${idBackground}`,
       method: 'PUT',
       query: query,
@@ -699,12 +699,12 @@ export class Members {
   /**
    * Delete a specific custom board background
    *
-   * @name DeleteMembersIdCustomboardbackgroundsIdbackground
+   * @name DeleteCustomBoardBackgroundsIdBackground
    * @summary Delete custom Board Background of Member
    * @request DELETE:/members/{id}/customBoardBackgrounds/{idBackground}
    * @secure
    */
-  public async deleteMembersIdCustomboardbackgroundsIdbackground(
+  public async deleteCustomBoardBackgroundsIdBackground(
     id: TrelloID | string,
     idBackground: TrelloID,
     params: IRequestParams = {}
@@ -720,16 +720,16 @@ export class Members {
   /**
    * Get a Member's uploaded custom Emojis
    *
-   * @name GetMembersIdCustomemoji
+   * @name GetCustomEmoji
    * @summary Get a Member's customEmojis
    * @request GET:/members/{id}/customEmoji
    * @secure
    */
-  public async getMembersIdCustomemoji(
+  public async getCustomEmoji(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<CustomEmoji[]> {
-    return this.client.request<CustomEmoji[]>({
+  ): Promise<ICustomEmoji[]> {
+    return this.client.request<ICustomEmoji[]>({
       path: `/members/${id}/customEmoji`,
       method: 'GET',
       secure: true,
@@ -740,12 +740,12 @@ export class Members {
   /**
    * Create a new custom Emoji
    *
-   * @name PostMembersIdCustomemoji
+   * @name CreateCustomEmoji
    * @summary Create custom Emoji for Member
    * @request POST:/members/{id}/customEmoji
    * @secure
    */
-  public async postMembersIdCustomemoji(
+  public async createCustomEmoji(
     id: TrelloID,
     query: {
       /** @format binary */
@@ -758,8 +758,8 @@ export class Members {
       name: string
     },
     params: IRequestParams = {}
-  ): Promise<CustomEmoji> {
-    return this.client.request<CustomEmoji>({
+  ): Promise<ICustomEmoji> {
+    return this.client.request<ICustomEmoji>({
       path: `/members/${id}/customEmoji`,
       method: 'POST',
       query: query,
@@ -771,12 +771,12 @@ export class Members {
   /**
    * Get a Member's custom Emoji
    *
-   * @name Membersidcustomemojiidemoji
+   * @name GetCustomEmojiIdEmoji
    * @summary Get a Member's custom Emoji
    * @request GET:/members/{id}/customEmoji/{idEmoji}
    * @secure
    */
-  public async membersidcustomemojiidemoji(
+  public async getCustomEmojiIdEmoji(
     id: TrelloID,
     idEmoji: TrelloID,
     query?: {
@@ -787,8 +787,8 @@ export class Members {
       fields?: 'name' | 'url' | 'all'
     },
     params: IRequestParams = {}
-  ): Promise<CustomEmoji> {
-    return this.client.request<CustomEmoji>({
+  ): Promise<ICustomEmoji> {
+    return this.client.request<ICustomEmoji>({
       path: `/members/${id}/customEmoji/${idEmoji}`,
       method: 'GET',
       query: query,
@@ -800,16 +800,16 @@ export class Members {
   /**
    * Get a Member's uploaded stickers
    *
-   * @name GetMembersIdCustomstickers
+   * @name GetCustomStickers
    * @summary Get Member's custom Stickers
    * @request GET:/members/{id}/customStickers
    * @secure
    */
-  public async getMembersIdCustomstickers(
+  public async getCustomStickers(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<CustomSticker[]> {
-    return this.client.request<CustomSticker[]>({
+  ): Promise<ICustomSticker[]> {
+    return this.client.request<ICustomSticker[]>({
       path: `/members/${id}/customStickers`,
       method: 'GET',
       secure: true,
@@ -820,20 +820,20 @@ export class Members {
   /**
    * Upload a new custom sticker
    *
-   * @name PostMembersIdCustomstickers
+   * @name CreateCustomStickers
    * @summary Create custom Sticker for Member
    * @request POST:/members/{id}/customStickers
    * @secure
    */
-  public async postMembersIdCustomstickers(
+  public async createCustomStickers(
     id: TrelloID,
     query: {
       /** @format binary */
       file: File
     },
     params: IRequestParams = {}
-  ): Promise<CustomSticker> {
-    return this.client.request<CustomSticker>({
+  ): Promise<ICustomSticker> {
+    return this.client.request<ICustomSticker>({
       path: `/members/${id}/customStickers`,
       method: 'POST',
       query: query,
@@ -845,12 +845,12 @@ export class Members {
   /**
    * Get a Member's custom Sticker
    *
-   * @name GetMembersIdCustomstickersIdsticker
+   * @name GetCustomStickersIdSticker
    * @summary Get a Member's custom Sticker
    * @request GET:/members/{id}/customStickers/{idSticker}
    * @secure
    */
-  public async getMembersIdCustomstickersIdsticker(
+  public async getCustomStickersIdSticker(
     id: TrelloID,
     idSticker: TrelloID,
     query?: {
@@ -861,8 +861,8 @@ export class Members {
       fields?: 'scaled' | 'url' | 'all'
     },
     params: IRequestParams = {}
-  ): Promise<CustomSticker> {
-    return this.client.request<CustomSticker>({
+  ): Promise<ICustomSticker> {
+    return this.client.request<ICustomSticker>({
       path: `/members/${id}/customStickers/${idSticker}`,
       method: 'GET',
       query: query,
@@ -874,12 +874,12 @@ export class Members {
   /**
    * Delete a Member's custom Sticker
    *
-   * @name DeleteMembersIdCustomstickersIdsticker
+   * @name DeleteCustomStickersIdSticker
    * @summary Delete a Member's custom Sticker
    * @request DELETE:/members/{id}/customStickers/{idSticker}
    * @secure
    */
-  public async deleteMembersIdCustomstickersIdsticker(
+  public async deleteCustomStickersIdSticker(
     id: TrelloID,
     idSticker: TrelloID,
     params: IRequestParams = {}
@@ -895,12 +895,12 @@ export class Members {
   /**
    * Get a member's notifications
    *
-   * @name GetMembersIdNotifications
+   * @name GetNotifications
    * @summary Get Member's Notifications
    * @request GET:/members/{id}/notifications
    * @secure
    */
-  public async getMembersIdNotifications(
+  public async getNotifications(
     id: TrelloID,
     query?: {
       /** @default false */
@@ -944,8 +944,8 @@ export class Members {
       memberCreator_fields?: string
     },
     params: IRequestParams = {}
-  ): Promise<Notification[]> {
-    return this.client.request<Notification[]>({
+  ): Promise<INotification[]> {
+    return this.client.request<INotification[]>({
       path: `/members/${id}/notifications`,
       method: 'GET',
       query: query,
@@ -957,12 +957,12 @@ export class Members {
   /**
    * Get a member's Workspaces
    *
-   * @name GetMembersIdOrganizations
+   * @name GetOrganizations
    * @summary Get Member's Organizations
    * @request GET:/members/{id}/organizations
    * @secure
    */
-  public async getMembersIdOrganizations(
+  public async getOrganizations(
     id: TrelloID,
     query?: {
       /**
@@ -982,8 +982,8 @@ export class Members {
       paid_account?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<Organization[]> {
-    return this.client.request<Organization[]>({
+  ): Promise<IOrganization[]> {
+    return this.client.request<IOrganization[]>({
       path: `/members/${id}/organizations`,
       method: 'GET',
       query: query,
@@ -995,12 +995,12 @@ export class Members {
   /**
    * Get a member's Workspaces they have been invited to
    *
-   * @name GetMembersIdOrganizationsinvited
+   * @name GetOrganizationsInvited
    * @summary Get Organizations a Member has been invited to
    * @request GET:/members/{id}/organizationsInvited
    * @secure
    */
-  public async getMembersIdOrganizationsinvited(
+  public async getOrganizationsInvited(
     id: TrelloID,
     query?: {
       /**
@@ -1010,8 +1010,8 @@ export class Members {
       fields?: OrganizationFields
     },
     params: IRequestParams = {}
-  ): Promise<Organization[]> {
-    return this.client.request<Organization[]>({
+  ): Promise<IOrganization[]> {
+    return this.client.request<IOrganization[]>({
       path: `/members/${id}/organizationsInvited`,
       method: 'GET',
       query: query,
@@ -1023,16 +1023,16 @@ export class Members {
   /**
    * List the saved searches of a Member
    *
-   * @name GetMembersIdSavedsearches
+   * @name GetSavedSearches
    * @summary Get Member's saved searched
    * @request GET:/members/{id}/savedSearches
    * @secure
    */
-  public async getMembersIdSavedsearches(
+  public async getSavedSearches(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<SavedSearch[]> {
-    return this.client.request<SavedSearch[]>({
+  ): Promise<ISavedSearch[]> {
+    return this.client.request<ISavedSearch[]>({
       path: `/members/${id}/savedSearches`,
       method: 'GET',
       secure: true,
@@ -1043,12 +1043,12 @@ export class Members {
   /**
    * Create a saved search
    *
-   * @name PostMembersIdSavedsearches
+   * @name CreateSavedSearches
    * @summary Create saved Search for Member
    * @request POST:/members/{id}/savedSearches
    * @secure
    */
-  public async postMembersIdSavedsearches(
+  public async createSavedSearches(
     id: TrelloID,
     query: {
       /** The name for the saved search */
@@ -1056,11 +1056,11 @@ export class Members {
       /** The search query */
       query: string
       /** The position of the saved search. `top`, `bottom`, or a positive float. */
-      pos: PosStringOrNumber
+      pos: IPosStringOrNumber
     },
     params: IRequestParams = {}
-  ): Promise<SavedSearch> {
-    return this.client.request<SavedSearch>({
+  ): Promise<ISavedSearch> {
+    return this.client.request<ISavedSearch>({
       path: `/members/${id}/savedSearches`,
       method: 'POST',
       query: query,
@@ -1072,17 +1072,17 @@ export class Members {
   /**
    * Get a saved search
    *
-   * @name GetMembersIdSavedsearchesIdsearch
+   * @name GetSavedSearchesIdSearch
    * @summary Get a saved search
    * @request GET:/members/{id}/savedSearches/{idSearch}
    * @secure
    */
-  public async getMembersIdSavedsearchesIdsearch(
+  public async getSavedSearchesIdSearch(
     id: string,
     idSearch: string,
     params: IRequestParams = {}
-  ): Promise<SavedSearch> {
-    return this.client.request<SavedSearch>({
+  ): Promise<ISavedSearch> {
+    return this.client.request<ISavedSearch>({
       path: `/members/${id}/savedSearches/${idSearch}`,
       method: 'GET',
       secure: true,
@@ -1093,12 +1093,12 @@ export class Members {
   /**
    * Update a saved search
    *
-   * @name PutMembersIdSavedsearchesIdsearch
+   * @name UpdateSavedSearchesIdSearch
    * @summary Update a saved search
    * @request PUT:/members/{id}/savedSearches/{idSearch}
    * @secure
    */
-  public async putMembersIdSavedsearchesIdsearch(
+  public async updateSavedSearchesIdSearch(
     id: string,
     idSearch: string,
     query?: {
@@ -1110,8 +1110,8 @@ export class Members {
       pos?: string
     },
     params: IRequestParams = {}
-  ): Promise<SavedSearch> {
-    return this.client.request<SavedSearch>({
+  ): Promise<ISavedSearch> {
+    return this.client.request<ISavedSearch>({
       path: `/members/${id}/savedSearches/${idSearch}`,
       method: 'PUT',
       query: query,
@@ -1123,12 +1123,12 @@ export class Members {
   /**
    * Delete a saved search
    *
-   * @name DeleteMembersIdSavedsearchesIdsearch
+   * @name DeleteSavedSearchesIdSearch
    * @summary Delete a saved search
    * @request DELETE:/members/{id}/savedSearches/{idSearch}
    * @secure
    */
-  public async deleteMembersIdSavedsearchesIdsearch(
+  public async deleteSavedSearchesIdSearch(
     id: string,
     idSearch: string,
     params: IRequestParams = {}
@@ -1144,12 +1144,12 @@ export class Members {
   /**
    * List a members app tokens
    *
-   * @name GetMembersIdTokens
+   * @name GetTokens
    * @summary Get Member's Tokens
    * @request GET:/members/{id}/tokens
    * @secure
    */
-  public async getMembersIdTokens(
+  public async getTokens(
     id: TrelloID,
     query?: {
       /**
@@ -1159,8 +1159,8 @@ export class Members {
       webhooks?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<Token[]> {
-    return this.client.request<Token[]>({
+  ): Promise<IToken[]> {
+    return this.client.request<IToken[]>({
       path: `/members/${id}/tokens`,
       method: 'GET',
       query: query,
@@ -1172,12 +1172,12 @@ export class Members {
   /**
    * Create a new avatar for a member
    *
-   * @name Membersidavatar
+   * @name CreateAvatar
    * @summary Create Avatar for Member
    * @request POST:/members/{id}/avatar
    * @secure
    */
-  public async membersidavatar(
+  public async createAvatar(
     id: string,
     query: {
       /** @format binary */
@@ -1197,12 +1197,12 @@ export class Members {
   /**
    * Dismiss a message
    *
-   * @name PostMembersIdOnetimemessagesdismissed
+   * @name CreateOneTimeMessagesDismissed
    * @summary Dismiss a message for Member
    * @request POST:/members/{id}/oneTimeMessagesDismissed
    * @secure
    */
-  public async postMembersIdOnetimemessagesdismissed(
+  public async createOneTimeMessagesDismissed(
     id: TrelloID,
     query: {
       /** The message to dismiss */
@@ -1222,16 +1222,16 @@ export class Members {
   /**
    * Get a member's notification channel settings
    *
-   * @name GetMembersIdNotificationChannelSettings
+   * @name GetNotificationsChannelSettings
    * @summary Get a Member's notification channel settings
    * @request GET:/members/{id}/notificationsChannelSettings
    * @secure
    */
-  public async getMembersIdNotificationChannelSettings(
+  public async getNotificationsChannelSettings(
     id: TrelloID | string,
     params: IRequestParams = {}
-  ): Promise<NotificationChannelSettings[]> {
-    return this.client.request<NotificationChannelSettings[]>({
+  ): Promise<INotificationChannelSettings[]> {
+    return this.client.request<INotificationChannelSettings[]>({
       path: `/members/${id}/notificationsChannelSettings`,
       method: 'GET',
       secure: true,
@@ -1242,12 +1242,12 @@ export class Members {
   /**
    * Update blocked notification keys of Member on a specific channel
    *
-   * @name PutMembersIdNotificationChannelSettingsChannelBlockedKeys
+   * @name UpdateNotificationsChannelSettings
    * @summary Update blocked notification keys of Member on a channel
    * @request PUT:/members/{id}/notificationsChannelSettings
    * @secure
    */
-  public async putMembersIdNotificationChannelSettingsChannelBlockedKeys(
+  public async updateNotificationsChannelSettings(
     id: TrelloID | string,
     data: {
       channel: Channel
@@ -1255,8 +1255,8 @@ export class Members {
       blockedKeys: BlockedKey | BlockedKey[]
     },
     params: IRequestParams = {}
-  ): Promise<NotificationChannelSettings> {
-    return this.client.request<NotificationChannelSettings>({
+  ): Promise<INotificationChannelSettings> {
+    return this.client.request<INotificationChannelSettings>({
       path: `/members/${id}/notificationsChannelSettings`,
       method: 'PUT',
       body: data,
@@ -1269,17 +1269,17 @@ export class Members {
   /**
    * Get blocked notification keys of Member on a specific channel
    *
-   * @name GetMembersIdNotificationChannelSettingsChannel
+   * @name GetNotificationsChannelSettingsChannel
    * @summary Get blocked notification keys of Member on this channel
    * @request GET:/members/{id}/notificationsChannelSettings/{channel}
    * @secure
    */
-  public async getMembersIdNotificationChannelSettingsChannel(
+  public async getNotificationsChannelSettingsChannel(
     id: TrelloID | string,
     channel: Channel,
     params: IRequestParams = {}
-  ): Promise<NotificationChannelSettings> {
-    return this.client.request<NotificationChannelSettings>({
+  ): Promise<INotificationChannelSettings> {
+    return this.client.request<INotificationChannelSettings>({
       path: `/members/${id}/notificationsChannelSettings/${channel}`,
       method: 'GET',
       secure: true,
@@ -1290,14 +1290,14 @@ export class Members {
   /**
    * Update blocked notification keys of Member on a specific channel
    *
-   * @name PutMembersIdNotificationChannelSettingsChannelBlockedKeys2
+   * @name UpdateNotificationsChannelSettingsChannel
    * @summary Update blocked notification keys of Member on a channel
    * @request PUT:/members/{id}/notificationsChannelSettings/{channel}
-   * @originalName putMembersIdNotificationChannelSettingsChannelBlockedKeys
+   * @originalName updateNotificationsChannelSettingsChannel
    * @duplicate
    * @secure
    */
-  public async putMembersIdNotificationChannelSettingsChannelBlockedKeys2(
+  public async updateNotificationsChannelSettingsChannel(
     id: TrelloID | string,
     channel: Channel,
     data: {
@@ -1305,8 +1305,8 @@ export class Members {
       blockedKeys: BlockedKey | BlockedKey[]
     },
     params: IRequestParams = {}
-  ): Promise<NotificationChannelSettings> {
-    return this.client.request<NotificationChannelSettings>({
+  ): Promise<INotificationChannelSettings> {
+    return this.client.request<INotificationChannelSettings>({
       path: `/members/${id}/notificationsChannelSettings/${channel}`,
       method: 'PUT',
       body: data,
@@ -1319,20 +1319,20 @@ export class Members {
   /**
    * Update blocked notification keys of Member on a specific channel
    *
-   * @name PutMembersIdNotificationChannelSettingsChannelBlockedKeys3
+   * @name UpdateNotificationsChannelSettingsChannelBlockedKeys
    * @summary Update blocked notification keys of Member on a channel
    * @request PUT:/members/{id}/notificationsChannelSettings/{channel}/{blockedKeys}
-   * @originalName putMembersIdNotificationChannelSettingsChannelBlockedKeys
+   * @originalName updateNotificationsChannelSettingsChannelBlockedKeys
    * @duplicate
    * @secure
    */
-  public async putMembersIdNotificationChannelSettingsChannelBlockedKeys3(
+  public async updateNotificationsChannelSettingsChannelBlockedKeys(
     id: TrelloID | string,
     channel: Channel,
     blockedKeys: BlockedKey,
     params: IRequestParams = {}
-  ): Promise<NotificationChannelSettings> {
-    return this.client.request<NotificationChannelSettings>({
+  ): Promise<INotificationChannelSettings> {
+    return this.client.request<INotificationChannelSettings>({
       path: `/members/${id}/notificationsChannelSettings/${channel}/${blockedKeys}`,
       method: 'PUT',
       secure: true,

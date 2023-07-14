@@ -10,19 +10,19 @@
  */
 
 import {
-  Board,
   BoardFields,
-  Card,
   CardFields,
+  IBoard,
+  ICard,
+  IMember,
+  INotification,
+  IOrganization,
+  ITrelloList,
   ListFields,
-  Member,
   MemberFields,
-  Notification,
   NotificationFields,
-  Organization,
   OrganizationFields,
-  TrelloID,
-  TrelloList
+  TrelloID
 } from './data-contracts'
 import { HttpClient, IRequestParams } from './http-client'
 
@@ -36,12 +36,12 @@ export class Notifications {
   /**
    * No description
    *
-   * @name GetNotificationsId
+   * @name Get
    * @summary Get a Notification
    * @request GET:/notifications/{id}
    * @secure
    */
-  public async getNotificationsId(
+  public async get(
     id: TrelloID,
     query?: {
       /**
@@ -116,8 +116,8 @@ export class Notifications {
       organization_fields?: OrganizationFields
     },
     params: IRequestParams = {}
-  ): Promise<Notification> {
-    return this.client.request<Notification>({
+  ): Promise<INotification> {
+    return this.client.request<INotification>({
       path: `/notifications/${id}`,
       method: 'GET',
       query: query,
@@ -129,20 +129,20 @@ export class Notifications {
   /**
    * Update the read status of a notification
    *
-   * @name PutNotificationsId
+   * @name Update
    * @summary Update a Notification's read status
    * @request PUT:/notifications/{id}
    * @secure
    */
-  public async putNotificationsId(
+  public async update(
     id: TrelloID,
     query?: {
       /** Whether the notification should be marked as read or not */
       unread?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<Notification> {
-    return this.client.request<Notification>({
+  ): Promise<INotification> {
+    return this.client.request<INotification>({
       path: `/notifications/${id}`,
       method: 'PUT',
       query: query,
@@ -154,17 +154,17 @@ export class Notifications {
   /**
    * Get a specific property of a notification
    *
-   * @name GetNotificationsIdField
+   * @name GetField
    * @summary Get a field of a Notification
    * @request GET:/notifications/{id}/{field}
    * @secure
    */
-  public async getNotificationsIdField(
+  public async getField(
     id: TrelloID,
     field: NotificationFields,
     params: IRequestParams = {}
-  ): Promise<Notification> {
-    return this.client.request<Notification>({
+  ): Promise<INotification> {
+    return this.client.request<INotification>({
       path: `/notifications/${id}/${field}`,
       method: 'GET',
       secure: true,
@@ -175,12 +175,12 @@ export class Notifications {
   /**
    * Mark all notifications as read
    *
-   * @name PostNotificationsAllRead
+   * @name CreateAllRead
    * @summary Mark all Notifications as read
    * @request POST:/notifications/all/read
    * @secure
    */
-  public async postNotificationsAllRead(
+  public async createAllRead(
     query?: {
       /**
        * Boolean to specify whether to mark as read or unread (defaults to `true`, marking as read)
@@ -191,8 +191,8 @@ export class Notifications {
       ids?: TrelloID[]
     },
     params: IRequestParams = {}
-  ): Promise<Notification> {
-    return this.client.request<Notification>({
+  ): Promise<INotification> {
+    return this.client.request<INotification>({
       path: `/notifications/all/read`,
       method: 'POST',
       query: query,
@@ -204,19 +204,19 @@ export class Notifications {
   /**
    * Update Notification's read status
    *
-   * @name PutNotificationsIdUnread
+   * @name UpdateUnread
    * @summary Update Notification's read status
    * @request PUT:/notifications/{id}/unread
    * @secure
    */
-  public async putNotificationsIdUnread(
+  public async updateUnread(
     id: TrelloID,
     query?: {
       value?: string
     },
     params: IRequestParams = {}
-  ): Promise<Notification> {
-    return this.client.request<Notification>({
+  ): Promise<INotification> {
+    return this.client.request<INotification>({
       path: `/notifications/${id}/unread`,
       method: 'PUT',
       query: query,
@@ -228,12 +228,12 @@ export class Notifications {
   /**
    * Get the board a notification is associated with
    *
-   * @name GetNotificationsIdBoard
+   * @name GetBoard
    * @summary Get the Board a Notification is on
    * @request GET:/notifications/{id}/board
    * @secure
    */
-  public async getNotificationsIdBoard(
+  public async getBoard(
     id: TrelloID,
     query?: {
       /**
@@ -243,8 +243,8 @@ export class Notifications {
       fields?: BoardFields
     },
     params: IRequestParams = {}
-  ): Promise<Board> {
-    return this.client.request<Board>({
+  ): Promise<IBoard> {
+    return this.client.request<IBoard>({
       path: `/notifications/${id}/board`,
       method: 'GET',
       query: query,
@@ -256,12 +256,12 @@ export class Notifications {
   /**
    * Get the card a notification is associated with
    *
-   * @name GetNotificationsIdCard
+   * @name GetCard
    * @summary Get the Card a Notification is on
    * @request GET:/notifications/{id}/card
    * @secure
    */
-  public async getNotificationsIdCard(
+  public async getCard(
     id: TrelloID,
     query?: {
       /**
@@ -271,8 +271,8 @@ export class Notifications {
       fields?: CardFields
     },
     params: IRequestParams = {}
-  ): Promise<Card> {
-    return this.client.request<Card>({
+  ): Promise<ICard> {
+    return this.client.request<ICard>({
       path: `/notifications/${id}/card`,
       method: 'GET',
       query: query,
@@ -284,12 +284,12 @@ export class Notifications {
   /**
    * Get the list a notification is associated with
    *
-   * @name GetNotificationsIdList
+   * @name GetList
    * @summary Get the List a Notification is on
    * @request GET:/notifications/{id}/list
    * @secure
    */
-  public async getNotificationsIdList(
+  public async getList(
     id: TrelloID,
     query?: {
       /**
@@ -299,8 +299,8 @@ export class Notifications {
       fields?: ListFields
     },
     params: IRequestParams = {}
-  ): Promise<TrelloList> {
-    return this.client.request<TrelloList>({
+  ): Promise<ITrelloList> {
+    return this.client.request<ITrelloList>({
       path: `/notifications/${id}/list`,
       method: 'GET',
       query: query,
@@ -312,12 +312,12 @@ export class Notifications {
   /**
    * Get the member (not the creator) a notification is about
    *
-   * @name Notificationsidmember
+   * @name GetMember
    * @summary Get the Member a Notification is about (not the creator)
    * @request GET:/notifications/{id}/member
    * @secure
    */
-  public async notificationsidmember(
+  public async getMember(
     id: TrelloID,
     query?: {
       /**
@@ -327,8 +327,8 @@ export class Notifications {
       fields?: MemberFields
     },
     params: IRequestParams = {}
-  ): Promise<Member> {
-    return this.client.request<Member>({
+  ): Promise<IMember> {
+    return this.client.request<IMember>({
       path: `/notifications/${id}/member`,
       method: 'GET',
       query: query,
@@ -340,12 +340,12 @@ export class Notifications {
   /**
    * Get the member who created the notification
    *
-   * @name GetNotificationsIdMembercreator
+   * @name GetMemberCreator
    * @summary Get the Member who created the Notification
    * @request GET:/notifications/{id}/memberCreator
    * @secure
    */
-  public async getNotificationsIdMembercreator(
+  public async getMemberCreator(
     id: TrelloID,
     query?: {
       /**
@@ -355,8 +355,8 @@ export class Notifications {
       fields?: MemberFields
     },
     params: IRequestParams = {}
-  ): Promise<Member> {
-    return this.client.request<Member>({
+  ): Promise<IMember> {
+    return this.client.request<IMember>({
       path: `/notifications/${id}/memberCreator`,
       method: 'GET',
       query: query,
@@ -368,12 +368,12 @@ export class Notifications {
   /**
    * Get the organization a notification is associated with
    *
-   * @name GetNotificationsIdOrganization
+   * @name GetOrganization
    * @summary Get a Notification's associated Organization
    * @request GET:/notifications/{id}/organization
    * @secure
    */
-  public async getNotificationsIdOrganization(
+  public async getOrganization(
     id: TrelloID,
     query?: {
       /**
@@ -383,8 +383,8 @@ export class Notifications {
       fields?: OrganizationFields
     },
     params: IRequestParams = {}
-  ): Promise<Organization> {
-    return this.client.request<Organization>({
+  ): Promise<IOrganization> {
+    return this.client.request<IOrganization>({
       path: `/notifications/${id}/organization`,
       method: 'GET',
       query: query,

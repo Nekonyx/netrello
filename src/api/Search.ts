@@ -9,7 +9,13 @@
  * ---------------------------------------------------------------
  */
 
-import { Board, Card, Member, Organization, TrelloID } from './data-contracts'
+import {
+  IBoard,
+  ICard,
+  IMember,
+  IOrganization,
+  TrelloID
+} from './data-contracts'
 import { HttpClient, IRequestParams } from './http-client'
 
 export class Search {
@@ -22,12 +28,12 @@ export class Search {
   /**
    * Find what you're looking for in Trello
    *
-   * @name GetSearch
+   * @name Get
    * @summary Search Trello
    * @request GET:/search
    * @secure
    */
-  public async getSearch(
+  public async get(
     query: {
       /**
        * The search query with a length of 1 to 16384 characters
@@ -133,8 +139,8 @@ export class Search {
       partial?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<(Member | Card | Board | Organization)[]> {
-    return this.client.request<(Member | Card | Board | Organization)[]>({
+  ): Promise<(IMember | ICard | IBoard | IOrganization)[]> {
+    return this.client.request<(IMember | ICard | IBoard | IOrganization)[]>({
       path: `/search`,
       method: 'GET',
       query: query,
@@ -146,12 +152,12 @@ export class Search {
   /**
    * Search for Trello members.
    *
-   * @name GetSearchMembers
+   * @name GetMembers
    * @summary Search for Members
    * @request GET:/search/members/
    * @secure
    */
-  public async getSearchMembers(
+  public async getMembers(
     query: {
       /**
        * Search query 1 to 16384 characters long
@@ -172,8 +178,8 @@ export class Search {
       onlyOrgMembers?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<Member[]> {
-    return this.client.request<Member[]>({
+  ): Promise<IMember[]> {
+    return this.client.request<IMember[]>({
       path: `/search/members/`,
       method: 'GET',
       query: query,

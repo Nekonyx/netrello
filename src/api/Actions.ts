@@ -10,19 +10,19 @@
  */
 
 import {
-  Action,
   ActionFields,
-  Board,
   BoardFields,
-  Card,
   CardFields,
+  IAction,
+  IBoard,
+  ICard,
+  IMember,
+  IOrganization,
+  ITrelloList,
   ListFields,
-  Member,
   MemberFields,
-  Organization,
   OrganizationFields,
-  TrelloID,
-  TrelloList
+  TrelloID
 } from './data-contracts'
 import { ContentType, HttpClient, IRequestParams } from './http-client'
 
@@ -36,12 +36,12 @@ export class Actions {
   /**
    * Get an Action
    *
-   * @name GetActionsId
+   * @name Get
    * @summary Get an Action
    * @request GET:/actions/{id}
    * @secure
    */
-  public async getActionsId(
+  public async get(
     id: TrelloID,
     query?: {
       /** @default true */
@@ -85,12 +85,12 @@ export class Actions {
   /**
    * Update a specific Action. Only comment actions can be updated. Used to edit the content of a comment.
    *
-   * @name PutActionsId
+   * @name Update
    * @summary Update an Action
    * @request PUT:/actions/{id}
    * @secure
    */
-  public async putActionsId(
+  public async update(
     id: TrelloID,
     query: {
       /** The new text for the comment */
@@ -110,12 +110,12 @@ export class Actions {
   /**
    * Delete a specific action. Only comment actions can be deleted.
    *
-   * @name DeleteActionsId
+   * @name Delete
    * @summary Delete an Action
    * @request DELETE:/actions/{id}
    * @secure
    */
-  public async deleteActionsId(
+  public async delete(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -130,17 +130,17 @@ export class Actions {
   /**
    * Get a specific property of an action
    *
-   * @name GetActionsIdField
+   * @name GetField
    * @summary Get a specific field on an Action
    * @request GET:/actions/{id}/{field}
    * @secure
    */
-  public async getActionsIdField(
+  public async getField(
     id: TrelloID,
     field: ActionFields,
     params: IRequestParams = {}
-  ): Promise<Action> {
-    return this.client.request<Action>({
+  ): Promise<IAction> {
+    return this.client.request<IAction>({
       path: `/actions/${id}/${field}`,
       method: 'GET',
       secure: true,
@@ -151,20 +151,20 @@ export class Actions {
   /**
    * Get the Board for an Action
    *
-   * @name GetActionsIdBoard
+   * @name GetBoard
    * @summary Get the Board for an Action
    * @request GET:/actions/{id}/board
    * @secure
    */
-  public async getActionsIdBoard(
+  public async getBoard(
     id: TrelloID,
     query?: {
       /** `all` or a comma-separated list of board fields */
       fields?: BoardFields
     },
     params: IRequestParams = {}
-  ): Promise<Board> {
-    return this.client.request<Board>({
+  ): Promise<IBoard> {
+    return this.client.request<IBoard>({
       path: `/actions/${id}/board`,
       method: 'GET',
       query: query,
@@ -176,12 +176,12 @@ export class Actions {
   /**
    * Get the card for an action
    *
-   * @name GetActionsIdCard
+   * @name GetCard
    * @summary Get the Card for an Action
    * @request GET:/actions/{id}/card
    * @secure
    */
-  public async getActionsIdCard(
+  public async getCard(
     id: TrelloID,
     query?: {
       /**
@@ -191,8 +191,8 @@ export class Actions {
       fields?: CardFields
     },
     params: IRequestParams = {}
-  ): Promise<Card> {
-    return this.client.request<Card>({
+  ): Promise<ICard> {
+    return this.client.request<ICard>({
       path: `/actions/${id}/card`,
       method: 'GET',
       query: query,
@@ -204,12 +204,12 @@ export class Actions {
   /**
    * Get the List for an Action
    *
-   * @name GetActionsIdList
+   * @name GetList
    * @summary Get the List for an Action
    * @request GET:/actions/{id}/list
    * @secure
    */
-  public async getActionsIdList(
+  public async getList(
     id: TrelloID,
     query?: {
       /**
@@ -219,8 +219,8 @@ export class Actions {
       fields?: ListFields
     },
     params: IRequestParams = {}
-  ): Promise<TrelloList> {
-    return this.client.request<TrelloList>({
+  ): Promise<ITrelloList> {
+    return this.client.request<ITrelloList>({
       path: `/actions/${id}/list`,
       method: 'GET',
       query: query,
@@ -232,12 +232,12 @@ export class Actions {
   /**
    * Gets the member of an action (not the creator)
    *
-   * @name GetActionsIdMember
+   * @name GetMember
    * @summary Get the Member of an Action
    * @request GET:/actions/{id}/member
    * @secure
    */
-  public async getActionsIdMember(
+  public async getMember(
     id: TrelloID,
     query?: {
       /**
@@ -247,8 +247,8 @@ export class Actions {
       fields?: MemberFields
     },
     params: IRequestParams = {}
-  ): Promise<Member> {
-    return this.client.request<Member>({
+  ): Promise<IMember> {
+    return this.client.request<IMember>({
       path: `/actions/${id}/member`,
       method: 'GET',
       query: query,
@@ -260,12 +260,12 @@ export class Actions {
   /**
    * Get the Member who created the Action
    *
-   * @name GetActionsIdMembercreator
+   * @name GetMemberCreator
    * @summary Get the Member Creator of an Action
    * @request GET:/actions/{id}/memberCreator
    * @secure
    */
-  public async getActionsIdMembercreator(
+  public async getMemberCreator(
     id: TrelloID,
     query?: {
       /**
@@ -275,8 +275,8 @@ export class Actions {
       fields?: MemberFields
     },
     params: IRequestParams = {}
-  ): Promise<Member> {
-    return this.client.request<Member>({
+  ): Promise<IMember> {
+    return this.client.request<IMember>({
       path: `/actions/${id}/memberCreator`,
       method: 'GET',
       query: query,
@@ -288,12 +288,12 @@ export class Actions {
   /**
    * Get the Organization of an Action
    *
-   * @name GetActionsIdOrganization
+   * @name GetOrganization
    * @summary Get the Organization of an Action
    * @request GET:/actions/{id}/organization
    * @secure
    */
-  public async getActionsIdOrganization(
+  public async getOrganization(
     id: TrelloID,
     query?: {
       /**
@@ -303,8 +303,8 @@ export class Actions {
       fields?: OrganizationFields
     },
     params: IRequestParams = {}
-  ): Promise<Organization> {
-    return this.client.request<Organization>({
+  ): Promise<IOrganization> {
+    return this.client.request<IOrganization>({
       path: `/actions/${id}/organization`,
       method: 'GET',
       query: query,
@@ -316,12 +316,12 @@ export class Actions {
   /**
    * Update a comment action
    *
-   * @name PutActionsIdText
+   * @name UpdateText
    * @summary Update a Comment Action
    * @request PUT:/actions/{id}/text
    * @secure
    */
-  public async putActionsIdText(
+  public async updateText(
     id: TrelloID,
     query: {
       /** The new text for the comment */
@@ -341,12 +341,12 @@ export class Actions {
   /**
    * List reactions for an action
    *
-   * @name GetActionsIdactionReactions
+   * @name GetReactions
    * @summary Get Action's Reactions
    * @request GET:/actions/{idAction}/reactions
    * @secure
    */
-  public async getActionsIdactionReactions(
+  public async getReactions(
     idAction: TrelloID,
     query?: {
       /**
@@ -374,12 +374,12 @@ export class Actions {
   /**
    * Adds a new reaction to an action
    *
-   * @name PostActionsIdactionReactions
+   * @name CreateReactions
    * @summary Create Reaction for Action
    * @request POST:/actions/{idAction}/reactions
    * @secure
    */
-  public async postActionsIdactionReactions(
+  public async createReactions(
     idAction: TrelloID,
     data: {
       /** The primary `shortName` of the emoji to add. See [/emoji](#emoji) */
@@ -406,12 +406,12 @@ export class Actions {
   /**
    * Get information for a reaction
    *
-   * @name GetActionsIdactionReactionsId
+   * @name GetReactionsIdAction
    * @summary Get Action's Reaction
    * @request GET:/actions/{idAction}/reactions/{id}
    * @secure
    */
-  public async getActionsIdactionReactionsId(
+  public async getReactionsIdAction(
     idAction: TrelloID,
     id: TrelloID,
     query?: {
@@ -440,12 +440,12 @@ export class Actions {
   /**
    * Deletes a reaction
    *
-   * @name DeleteActionsIdactionReactionsId
+   * @name DeleteReactionsIdAction
    * @summary Delete Action's Reaction
    * @request DELETE:/actions/{idAction}/reactions/{id}
    * @secure
    */
-  public async deleteActionsIdactionReactionsId(
+  public async deleteReactionsIdAction(
     idAction: TrelloID,
     id: TrelloID,
     params: IRequestParams = {}
@@ -461,12 +461,12 @@ export class Actions {
   /**
    * List a summary of all reactions for an action
    *
-   * @name GetActionsIdactionReactionsummary
+   * @name GetReactionsSummary
    * @summary List Action's summary of Reactions
    * @request GET:/actions/{idAction}/reactionsSummary
    * @secure
    */
-  public async getActionsIdactionReactionsummary(
+  public async getReactionsSummary(
     idAction: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {

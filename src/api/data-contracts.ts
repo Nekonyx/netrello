@@ -9,8 +9,6 @@
  * ---------------------------------------------------------------
  */
 
-export type PosStringOrNumber = 'top' | 'bottom' | number
-
 /**
  * @pattern ^[0-9a-fA-F]{32}$
  * @example "0471642aefef5fa1fa76530ce1ba4c85"
@@ -20,20 +18,7 @@ export type APIKey = string
 /** @example "9eb76d9a9d02b8dd40c2f3e5df18556c831d4d1fadbe2c45f8310e6c93b5c548" */
 export type APIToken = string
 
-export enum ActionFields {
-  Id = 'id',
-  IdMemberCreator = 'idMemberCreator',
-  Data = 'data',
-  Type = 'type',
-  Date = 'date',
-  Limits = 'limits',
-  Display = 'display',
-  MemberCreator = 'memberCreator'
-}
-
-export interface Action {
-  id?: TrelloID
-  idMemberCreator?: TrelloID
+export interface IAction {
   data?: {
     /** @example "Can never go wrong with bowie" */
     text?: string
@@ -59,33 +44,11 @@ export interface Action {
       name?: string
     }
   }
-  /** @example "commentCard" */
-  type?: string
   /**
    * @format date-time
    * @example "2020-03-09T19:41:51.396Z"
    */
   date?: string
-  limits?: {
-    reactions?: {
-      perAction?: {
-        /** @example "ok" */
-        status?: string
-        /** @example 1000 */
-        disableAt?: number
-        /** @example 900 */
-        warnAt?: number
-      }
-      uniquePerAction?: {
-        /** @example "ok" */
-        status?: string
-        /** @example 1000 */
-        disableAt?: number
-        /** @example 900 */
-        warnAt?: number
-      }
-    }
-  }
   display?: {
     /** @example "action_comment_on_card" */
     translationKey?: string
@@ -125,6 +88,28 @@ export interface Action {
       }
     }
   }
+  id?: TrelloID
+  idMemberCreator?: TrelloID
+  limits?: {
+    reactions?: {
+      perAction?: {
+        /** @example "ok" */
+        status?: string
+        /** @example 1000 */
+        disableAt?: number
+        /** @example 900 */
+        warnAt?: number
+      }
+      uniquePerAction?: {
+        /** @example "ok" */
+        status?: string
+        /** @example 1000 */
+        disableAt?: number
+        /** @example 900 */
+        warnAt?: number
+      }
+    }
+  }
   memberCreator?: {
     /** @example "5b02e7f4e1facdc393169f9d" */
     id?: TrelloID
@@ -146,6 +131,53 @@ export interface Action {
     /** @example "bobloblaw" */
     username?: string
   }
+  /** @example "commentCard" */
+  type?: string
+}
+
+export enum ActionFields {
+  Id = 'id',
+  IdMemberCreator = 'idMemberCreator',
+  Data = 'data',
+  Type = 'type',
+  Date = 'date',
+  Limits = 'limits',
+  Display = 'display',
+  MemberCreator = 'memberCreator'
+}
+
+export interface IAttachment {
+  /** @example null */
+  bytes?: string | null
+  /**
+   * @format date
+   * @example "2018-10-17T19:10:14.808Z"
+   */
+  date?: string
+  /** @example null */
+  edgeColor?: Color | null
+  /** @example "5bc79d4206526d2279c1e6ea" */
+  id?: TrelloID
+  /** @example "5bc79d4206526d2279c1e6eb" */
+  idMember?: TrelloID
+  /** @example false */
+  isUpload?: boolean
+  /** @example "" */
+  mimeType?: string
+  /** @example "Deprecation Extension Notice" */
+  name?: string
+  /**
+   * @format float
+   * @example 1638
+   */
+  pos?: number
+  /** @example [] */
+  previews?: string[]
+  /**
+   * @format url
+   * @example "https://admin.typeform.com/form/RzExEM/share#/link"
+   */
+  url?: string
 }
 
 export enum AttachmentFields {
@@ -162,40 +194,6 @@ export enum AttachmentFields {
   Pos = 'pos'
 }
 
-export interface Attachment {
-  /** @example "5bc79d4206526d2279c1e6ea" */
-  id?: TrelloID
-  /** @example null */
-  bytes?: string | null
-  /**
-   * @format date
-   * @example "2018-10-17T19:10:14.808Z"
-   */
-  date?: string
-  /** @example null */
-  edgeColor?: Color | null
-  /** @example "5bc79d4206526d2279c1e6eb" */
-  idMember?: TrelloID
-  /** @example false */
-  isUpload?: boolean
-  /** @example "" */
-  mimeType?: string
-  /** @example "Deprecation Extension Notice" */
-  name?: string
-  /** @example [] */
-  previews?: string[]
-  /**
-   * @format url
-   * @example "https://admin.typeform.com/form/RzExEM/share#/link"
-   */
-  url?: string
-  /**
-   * @format float
-   * @example 1638
-   */
-  pos?: number
-}
-
 /** @example "notification_comment_card" */
 export enum BlockedKey {
   NotificationCommentCard = 'notification_comment_card',
@@ -210,52 +208,25 @@ export enum BlockedKey {
   NotificationUnarchivedCard = 'notification_unarchived_card'
 }
 
-export enum BoardFields {
-  Id = 'id',
-  Name = 'name',
-  Desc = 'desc',
-  DescData = 'descData',
-  Closed = 'closed',
-  IdMemberCreator = 'idMemberCreator',
-  IdOrganization = 'idOrganization',
-  Pinned = 'pinned',
-  Url = 'url',
-  ShortUrl = 'shortUrl',
-  Prefs = 'prefs',
-  LabelNames = 'labelNames',
-  Starred = 'starred',
-  Limits = 'limits',
-  Memberships = 'memberships',
-  EnterpriseOwned = 'enterpriseOwned'
-}
-
-export interface Board {
-  id: TrelloID
-  /**
-   * The name of the board.
-   * @example "Trello Platform Changes"
-   */
-  name?: string
+export interface IBoard {
+  /** @example false */
+  closed?: boolean
+  creationMethod?: string | null
+  /** @format date */
+  dateLastActivity?: string
+  /** @format date */
+  dateLastView?: string
+  /** @format date */
+  datePluginDisable?: string | null
   /** @example "Track changes to Trello's Platform on this board." */
   desc?: string
   descData?: string
-  /** @example false */
-  closed?: boolean
+  enterpriseOwned?: boolean
+  id: TrelloID
   idMemberCreator?: TrelloID
   idOrganization?: TrelloID
-  /** @example false */
-  pinned?: boolean
-  /**
-   * @format url
-   * @example "https://trello.com/b/dQHqCohZ/trello-platform-changelog"
-   */
-  url?: string
-  /**
-   * @format url
-   * @example "https://trello.com/b/dQHqCohZ"
-   */
-  shortUrl?: string
-  prefs?: Prefs
+  idTags?: string
+  ixUpdate?: number
   labelNames?: {
     /** @example "Addition" */
     green?: string
@@ -278,30 +249,57 @@ export interface Board {
     /** @example "Capabilties" */
     black?: string
   }
-  limits?: Limits
-  starred?: boolean
+  limits?: ILimits
   memberships?: string
-  shortLink?: string
-  subscribed?: boolean
+  /**
+   * The name of the board.
+   * @example "Trello Platform Changes"
+   */
+  name?: string
+  /** @example false */
+  pinned?: boolean
   powerUps?: string
-  /** @format date */
-  dateLastActivity?: string
-  /** @format date */
-  dateLastView?: string
-  idTags?: string
-  /** @format date */
-  datePluginDisable?: string | null
-  creationMethod?: string | null
-  ixUpdate?: number
+  prefs?: IPrefs
+  shortLink?: string
+  /**
+   * @format url
+   * @example "https://trello.com/b/dQHqCohZ"
+   */
+  shortUrl?: string
+  starred?: boolean
+  subscribed?: boolean
   templateGallery?: string | null
-  enterpriseOwned?: boolean
+  /**
+   * @format url
+   * @example "https://trello.com/b/dQHqCohZ/trello-platform-changelog"
+   */
+  url?: string
 }
 
-export interface BoardBackground {
+export interface IBoardBackground {
   id?: TrelloID
 }
 
-export interface BoardStars {
+export enum BoardFields {
+  Id = 'id',
+  Name = 'name',
+  Desc = 'desc',
+  DescData = 'descData',
+  Closed = 'closed',
+  IdMemberCreator = 'idMemberCreator',
+  IdOrganization = 'idOrganization',
+  Pinned = 'pinned',
+  Url = 'url',
+  ShortUrl = 'shortUrl',
+  Prefs = 'prefs',
+  LabelNames = 'labelNames',
+  Starred = 'starred',
+  Limits = 'limits',
+  Memberships = 'memberships',
+  EnterpriseOwned = 'enterpriseOwned'
+}
+
+export interface IBoardStars {
   /** @example "585063850027165010be15a8" */
   id?: TrelloID
   /** @example "57f7df684f1ca8c2877162e0" */
@@ -310,31 +308,11 @@ export interface BoardStars {
   pos?: number
 }
 
-/** @example "email" */
-export enum Channel {
-  Email = 'email'
+export interface ICFValue {
+  number?: string
 }
 
-export interface CheckItem {
-  /** @example "5dc9b507756e182c76007621" */
-  idChecklist?: TrelloID
-  /** @example "incomplete" */
-  state?: 'complete' | 'incomplete'
-  /** @example "5dc9b509f02f4314edc4303a" */
-  id?: TrelloID
-  name?: string
-  /** @example null */
-  nameData?: string | null
-  /** @example 1673 */
-  pos?: string
-}
-
-export interface Checklist {
-  id?: TrelloID
-}
-
-export interface Card {
-  id?: TrelloID
+export interface ICard {
   address?: string | null
   badges?: {
     attachmentsByType?: {
@@ -368,6 +346,15 @@ export interface Card {
   checkItemStates?: string[]
   closed?: boolean
   coordinates?: string | null
+  cover?: {
+    idAttachment?: TrelloID | null
+    color?: Color | null
+    idUploadedBackground?: boolean | null
+    size?: 'normal'
+    brightness?: 'light' | 'dark'
+    /** @example false */
+    isTemplate?: boolean
+  }
   creationMethod?: string | null
   /**
    * @format date-time
@@ -391,19 +378,20 @@ export interface Card {
    * @example "bentleycook+2kea95u7kchsvqnxkwe+2q0byi6qv4pt9uc7q5m+25qyyohtzg@boards.trello.com"
    */
   email?: string
+  id?: TrelloID
+  /** @example "5abbe4b7ddc1b351ef961415" */
+  idAttachmentCover?: TrelloID | null
   /** @example "5abbe4b7ddc1b351ef961414" */
   idBoard?: TrelloID
-  idChecklists?: (Checklist | TrelloID)[]
-  idLabels?: (Label | TrelloID)[]
+  idChecklists?: (IChecklist | TrelloID)[]
+  idLabels?: (ILabel | TrelloID)[]
   /** @example "5abbe4b7ddc1b351ef961415" */
   idList?: TrelloID
   idMembers?: TrelloID[]
   idMembersVoted?: TrelloID[]
   idShort?: number
-  /** @example "5abbe4b7ddc1b351ef961415" */
-  idAttachmentCover?: TrelloID | null
   labels?: TrelloID[]
-  limits?: Limits
+  limits?: ILimits
   locationName?: string | null
   /** @example false */
   manualCoverAttachment?: boolean
@@ -428,15 +416,11 @@ export interface Card {
    * @example "https://trello.com/c/H0TZyzbK/4-%F0%9F%91%8B-what-why-how"
    */
   url?: string
-  cover?: {
-    idAttachment?: TrelloID | null
-    color?: Color | null
-    idUploadedBackground?: boolean | null
-    size?: 'normal'
-    brightness?: 'light' | 'dark'
-    /** @example false */
-    isTemplate?: boolean
-  }
+}
+
+export enum CardAging {
+  Pirate = 'pirate',
+  Regular = 'regular'
 }
 
 /** The fields on a Card. */
@@ -477,7 +461,32 @@ export enum CardFields {
   IsTemplate = 'isTemplate'
 }
 
-export interface ClaimableOrganizations {
+/** @example "email" */
+export enum Channel {
+  Email = 'email'
+}
+
+export interface ICheckItem {
+  /** @example "5dc9b509f02f4314edc4303a" */
+  id?: TrelloID
+  /** @example "5dc9b507756e182c76007621" */
+  idChecklist?: TrelloID
+  name?: string
+  /** @example null */
+  nameData?: string | null
+  /** @example 1673 */
+  pos?: string
+  /** @example "incomplete" */
+  state?: 'complete' | 'incomplete'
+}
+
+export interface IChecklist {
+  id?: TrelloID
+}
+
+export interface IClaimableOrganizations {
+  /** @example 2 */
+  claimableCount?: number
   organizations?: {
     /** @example "organization_name" */
     name?: string
@@ -498,31 +507,34 @@ export interface ClaimableOrganizations {
      */
     dateLastActive?: string | null
   }[]
-  /** @example 2 */
-  claimableCount?: number
 }
 
-export interface CustomEmoji {
+export enum Color {
+  Yellow = 'yellow',
+  Purple = 'purple',
+  Blue = 'blue',
+  Red = 'red',
+  Green = 'green',
+  Orange = 'orange',
+  Black = 'black',
+  Sky = 'sky',
+  Pink = 'pink',
+  Lime = 'lime'
+}
+
+export interface ICustomEmoji {
   /** @example "5900ac11ed55d6d2c355c5d6" */
   id?: TrelloID
+  /** @example "chorizo" */
+  name?: string
   /**
    * @format url
    * @example "https://trello-emoji.s3.amazonaws.com/5589c3ea49b40cedc28cf70e/b40d9925f4e75495104b5e560881d8e4/chorizo.png"
    */
   url?: string
-  /** @example "chorizo" */
-  name?: string
 }
 
-export interface CustomField {
-  /** @example "5ab10be237846c43015f108e" */
-  id?: TrelloID
-  /** @example "586e8f681d4fe9b06a928307" */
-  idModel?: string
-  /** @example "board" */
-  modelType?: 'card' | 'board' | 'member'
-  /** @example "f6177ba6839d6fff0f73922c1cea105e793fda8a1433d466104dacc0b7c56955" */
-  fieldGroup?: string
+export interface ICustomField {
   display?: {
     /** @example true */
     cardFront?: boolean
@@ -545,34 +557,42 @@ export interface CustomField {
       pos?: number
     }[]
   }
+  /** @example "f6177ba6839d6fff0f73922c1cea105e793fda8a1433d466104dacc0b7c56955" */
+  fieldGroup?: string
+  /** @example "5ab10be237846c43015f108e" */
+  id?: TrelloID
+  /** @example "586e8f681d4fe9b06a928307" */
+  idModel?: string
+  /** @example "board" */
+  modelType?: 'card' | 'board' | 'member'
   /** @example "list" */
   type?: string
 }
 
-export interface CustomFieldItems {
+export interface ICustomFieldItems {
   id?: TrelloID
-  value?: {
-    /** @example "true" */
-    checked?: string
-  }
   /** @example "5b080fd8017bd1653b5480fa" */
   idCustomField?: TrelloID
   /** @example "5b080ff194611b41aaaa9570" */
   idModel?: TrelloID
   /** @example "card" */
   modelType?: 'card' | 'board' | 'member'
+  value?: {
+    /** @example "true" */
+    checked?: string
+  }
 }
 
-export interface CustomSticker {
+export interface ICustomSticker {
   id?: TrelloID
-  /** @format url */
-  url?: string
   scaled?: {
     id?: TrelloID
   }[]
+  /** @format url */
+  url?: string
 }
 
-export interface Emoji {
+export interface IEmoji {
   trello?: {
     /** @example "1F600" */
     unified?: string
@@ -599,60 +619,33 @@ export interface Emoji {
   }[]
 }
 
-export interface Enterprise {
-  /** @example "59c15d19566e197b23665901" */
-  id?: TrelloID
-  /** @example "bentley_test" */
-  name?: string
+export interface IEnterprise {
+  /**
+   * @format date
+   * @example "2019-08-22T18:15:53.546Z"
+   */
+  dateOrganizationPrefsLastUpdated?: string
   /** @example "Bentley's Test Enterprise!" */
   displayName?: string
-  /** @example null */
-  logoHash?: string | null
-  /** @example null */
-  logoUrl?: string | null
-  prefs?: {
+  domains?: string[]
+  enterpriseDomains?: string[]
+  /** @example "59c15d19566e197b23665901" */
+  id?: TrelloID
+  idAdmins?: TrelloID[]
+  idOrganizations?: TrelloID[]
+  idp?: {
     /** @example false */
-    ssoOnly?: boolean
-    signup?: {
-      banner?: string
-      /**
-       * @example "<p>Hello</p>
-       * "
-       */
-      bannerHtml?: string
-    }
+    requestSigned?: boolean
+    /** @example null */
+    certificate?: string | null
     /**
-     * @format date
+     * @format url
      * @example null
      */
-    mandatoryTransferDate?: string | null
-    brandingColor?: string
-    /** @example false */
-    autoJoinOrganizations?: boolean
-    notifications?: object
-    /** @example null */
-    maxMembers?: number | null
+    loginUrl?: string | null
   }
-  organizationPrefs?: {
-    boardVisibilityRestrict?: object
-    boardDeleteRestrict?: object
-    attachmentRestrictions?: (
-      | 'computer'
-      | 'trello'
-      | 'google-drive'
-      | 'box'
-      | 'onedrive'
-      | 'link'
-    )[]
-  }
-  ssoActivationFailed?: boolean
-  idAdmins?: TrelloID[]
-  enterpriseDomains?: string[]
   /** @example true */
   isRealEnterprise?: boolean
-  pluginWhitelistingEnabled?: TrelloID[]
-  idOrganizations?: TrelloID[]
-  products?: number[]
   licenses?: {
     /**
      * @format integer
@@ -676,44 +669,77 @@ export interface Enterprise {
       count?: number
     }[]
   }
-  domains?: string[]
-  /**
-   * @format date
-   * @example "2019-08-22T18:15:53.546Z"
-   */
-  dateOrganizationPrefsLastUpdated?: string
-  idp?: {
+  /** @example null */
+  logoHash?: string | null
+  /** @example null */
+  logoUrl?: string | null
+  /** @example "bentley_test" */
+  name?: string
+  organizationPrefs?: {
+    boardVisibilityRestrict?: object
+    boardDeleteRestrict?: object
+    attachmentRestrictions?: (
+      | 'computer'
+      | 'trello'
+      | 'google-drive'
+      | 'box'
+      | 'onedrive'
+      | 'link'
+    )[]
+  }
+  pluginWhitelistingEnabled?: TrelloID[]
+  prefs?: {
     /** @example false */
-    requestSigned?: boolean
-    /** @example null */
-    certificate?: string | null
+    ssoOnly?: boolean
+    signup?: {
+      banner?: string
+      /**
+       * @example "<p>Hello</p>
+       * "
+       */
+      bannerHtml?: string
+    }
     /**
-     * @format url
+     * @format date
      * @example null
      */
-    loginUrl?: string | null
+    mandatoryTransferDate?: string | null
+    brandingColor?: string
+    /** @example false */
+    autoJoinOrganizations?: boolean
+    notifications?: object
+    /** @example null */
+    maxMembers?: number | null
   }
+  products?: number[]
+  ssoActivationFailed?: boolean
 }
 
-export interface EnterpriseAdmin {
-  /** @example "5dced8665015383ed5ca248c" */
-  id?: TrelloID
+export interface IEnterpriseAdmin {
   /** @example "Bob Loblaw" */
   fullName?: string
+  /** @example "5dced8665015383ed5ca248c" */
+  id?: TrelloID
   /** @example "bobloblaw" */
   username?: string
 }
 
-export interface EnterpriseAuditLog {
-  /** @example "5dced8665015383ed5ca248c" */
-  idAction?: TrelloID
-  /** @example "addOrganizationToEnterprise" */
-  type?: string
+export interface IEnterpriseAuditLog {
   /**
    * @format date
    * @example "2018-04-26T17:03:25.155Z"
    */
   date?: string
+  /** @example "5dced8665015383ed5ca248c" */
+  idAction?: TrelloID
+  member?: {
+    /** @example "5bc79d4206526d2279c1e6ea" */
+    id?: TrelloID
+    /** @example "bentleycook" */
+    username?: string
+    /** @example "Bentley Cook" */
+    fullName?: string
+  }
   memberCreator?: {
     /** @example "5bc79d4206526d2279c1e6ea" */
     id?: TrelloID
@@ -739,19 +765,27 @@ export interface EnterpriseAuditLog {
     /** @example "organization name" */
     name?: string
   }
-  member?: {
-    /** @example "5bc79d4206526d2279c1e6ea" */
-    id?: TrelloID
-    /** @example "bentleycook" */
-    username?: string
-    /** @example "Bentley Cook" */
-    fullName?: string
-  }
+  /** @example "addOrganizationToEnterprise" */
+  type?: string
 }
 
-export interface Export {
+export interface IError {
+  code: string
+  message: string
+}
+
+export interface IExport {
+  /** @example null */
+  exportUrl?: string | null
   /** @example "5dced8665015383ed5ca248c" */
   id?: TrelloID
+  /** @example null */
+  size?: string | null
+  /**
+   * @format date-time
+   * @example "2019-11-15T16:55:02.000Z"
+   */
+  startedAt?: string
   status?: {
     /** @example 0 */
     attempts?: number
@@ -760,54 +794,9 @@ export interface Export {
     /** @example "Export_queued" */
     stage?: string
   }
-  /**
-   * @format date-time
-   * @example "2019-11-15T16:55:02.000Z"
-   */
-  startedAt?: string
-  /** @example null */
-  size?: string | null
-  /** @example null */
-  exportUrl?: string | null
 }
 
-/**
- * @pattern ^[0-9a-fA-F]{24}$
- * @example "5abbe4b7ddc1b351ef961414"
- */
-export type TrelloID = string
-
-export enum ViewFilter {
-  All = 'all',
-  Closed = 'closed',
-  None = 'none',
-  Open = 'open'
-}
-
-export enum Color {
-  Yellow = 'yellow',
-  Purple = 'purple',
-  Blue = 'blue',
-  Red = 'red',
-  Green = 'green',
-  Orange = 'orange',
-  Black = 'black',
-  Sky = 'sky',
-  Pink = 'pink',
-  Lime = 'lime'
-}
-
-export enum CardAging {
-  Pirate = 'pirate',
-  Regular = 'regular'
-}
-
-export interface ImageDescriptor {
-  /**
-   * The width of the image.
-   * @example 100
-   */
-  width?: number
+export interface IImageDescriptor {
   /**
    * The height of the image.
    * @example 64
@@ -819,9 +808,16 @@ export interface ImageDescriptor {
    * @example "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/100x64/abc/photo-123.jpg"
    */
   url?: string
+  /**
+   * The width of the image.
+   * @example 100
+   */
+  width?: number
 }
 
-export interface Label {
+export interface ILabel {
+  /** The color of the label. Null means no color and the label will not be shown on the front of Cards. */
+  color?: Color
   /** The ID of the label. */
   id?: TrelloID
   /**
@@ -836,73 +832,42 @@ export interface Label {
    * @example "Overdue"
    */
   name?: string | null
-  /** The color of the label. Null means no color and the label will not be shown on the front of Cards. */
-  color?: Color
+}
+
+export interface ILimits {
+  attachments?: {
+    perBoard?: ILimitsObject
+  }
+}
+
+export interface ILimitsObject {
+  /** @example 36000 */
+  disableAt?: number
+  status?: 'ok' | 'warning'
+  /** @example 32400 */
+  warnAt?: number
 }
 
 export enum ListFields {
   Id = 'id'
 }
 
-export interface TrelloList {
-  id?: TrelloID
+export interface IMember {
   /**
-   * The name of the list
-   * @example "Things to buy today"
+   * @format email
+   * @example null
    */
-  name?: string
-  closed?: boolean
-  pos?: number
-  softLimit?: string
-  idBoard?: string
-  subscribed?: boolean
-  limits?: Limits
-}
-
-export interface LimitsObject {
-  status?: 'ok' | 'warning'
-  /** @example 36000 */
-  disableAt?: number
-  /** @example 32400 */
-  warnAt?: number
-}
-
-export interface Limits {
-  attachments?: {
-    perBoard?: LimitsObject
-  }
-}
-
-export enum MemberFields {
-  Id = 'id'
-}
-
-export interface Membership {
-  managed?: boolean
-  licensed?: boolean
-  admin?: boolean
-  deactivated?: boolean
-  collaborator?: boolean
-  /** @example {"id":"646e92a0a016198d3cf81e8a","fullname":"Lex Math","username":"amath","dateLastImpression":"2023-05-24T22:41:36.406Z","email":"amath@trello.com","initials":"AM","avatarURL":"trello.com/avatarURL","memberType":"Admin","confirmed":true} */
-  member?: {
-    id?: string
-    fullname?: string
-    username?: string
-    dateLastImpression?: string
-    email?: string
-    initials?: string
-    avatarURL?: string
-    memberType?: string
-    confirmed?: boolean
-  }
-}
-
-export interface Member {
-  id?: TrelloID
+  aaEmail?: string | null
+  /** @example null */
+  aaEnrolledDate?: string | null
+  /** @example null */
+  aaId?: string | null
   /** @example false */
   activityBlocked?: boolean
   /** @example "fc8faaaee46666a4eb8b626c08933e16" */
   avatarHash?: string
+  /** @example "gravatar" */
+  avatarSource?: 'gravatar' | 'upload'
   /**
    * @format url
    * @example "https://trello-avatars.s3.amazonaws.com/fc8faaaee46666a4eb8b626c08933e16"
@@ -915,17 +880,54 @@ export interface Member {
   }
   /** @example true */
   confirmed?: boolean
+  /** @example "bcook@atlassian.com" */
+  email?: string
   /** @example "Bentley Cook" */
   fullName?: string
+  /** @example "0a1e804f6e35a65ae5e1f7ef4c92471c" */
+  gravatarHash?: string
+  id?: TrelloID
+  idBoards?: TrelloID[]
+  idBoardsPinned?: TrelloID[] | null
   idEnterprise?: TrelloID
+  idEnterprisesAdmin?: TrelloID[]
   idEnterprisesDeactivated?: string[]
   /** @example null */
   idMemberReferrer?: TrelloID | null
+  idOrganizations?: TrelloID[]
   idPremOrgsAdmin?: TrelloID[]
   /** @example "BC" */
   initials?: string
+  /** @example false */
+  isAaMastered?: boolean
+  /** @example "48427" */
+  ixUpdate?: number
+  limits?: ILimitsObject
+  loginTypes?: ('password' | 'saml')[]
+  marketingOptIn?: {
+    /** @example false */
+    optedIn?: boolean
+    /**
+     * @format date
+     * @example "2018-04-26T17:03:25.155Z"
+     */
+    date?: string
+  }
   /** @example "normal" */
   memberType?: 'normal' | 'ghost'
+  messagesDismissed?: {
+    /** @example "ad-security-features" */
+    name?: string
+    /** @example 4 */
+    count?: string
+    /**
+     * @format date
+     * @example "2019-03-11T20:19:46.809Z"
+     */
+    lastDismissed?: string
+    /** @example "5995d44573d197eada632a32" */
+    _id?: TrelloID
+  }
   /**
    * Profile data with restricted visibility. These fields are visible only to members of the
    * same organization. The values here (full name, for example) may differ from the values
@@ -950,60 +952,12 @@ export interface Member {
    * @example false
    */
   nonPublicAvailable?: boolean
+  oneTimeMessagesDismissed?: string[]
+  prefs?: IMemberPrefs
+  premiumFeatures?: string[]
   products?: number[]
-  /**
-   * @format url
-   * @example "https://trello.com/bentleycook"
-   */
-  url?: string
-  /** @example "bentleycook" */
-  username?: string
   /** @example "disconnected" */
   status?: 'disconnected'
-  /**
-   * @format email
-   * @example null
-   */
-  aaEmail?: string | null
-  /** @example null */
-  aaEnrolledDate?: string | null
-  /** @example null */
-  aaId?: string | null
-  /** @example "gravatar" */
-  avatarSource?: 'gravatar' | 'upload'
-  /** @example "bcook@atlassian.com" */
-  email?: string
-  /** @example "0a1e804f6e35a65ae5e1f7ef4c92471c" */
-  gravatarHash?: string
-  idBoards?: TrelloID[]
-  idOrganizations?: TrelloID[]
-  idEnterprisesAdmin?: TrelloID[]
-  limits?: LimitsObject
-  loginTypes?: ('password' | 'saml')[]
-  marketingOptIn?: {
-    /** @example false */
-    optedIn?: boolean
-    /**
-     * @format date
-     * @example "2018-04-26T17:03:25.155Z"
-     */
-    date?: string
-  }
-  messagesDismissed?: {
-    /** @example "ad-security-features" */
-    name?: string
-    /** @example 4 */
-    count?: string
-    /**
-     * @format date
-     * @example "2019-03-11T20:19:46.809Z"
-     */
-    lastDismissed?: string
-    /** @example "5995d44573d197eada632a32" */
-    _id?: TrelloID
-  }
-  oneTimeMessagesDismissed?: string[]
-  prefs?: MemberPrefs
   trophies?: string[]
   /** @example "dac3ad49ff117829dd63a79bb2ea3426" */
   uploadedAvatarHash?: string
@@ -1012,15 +966,38 @@ export interface Member {
    * @example "https://trello-avatars.s3.amazonaws.com/dac3ad49ff117829dd63a79bb2ea3426"
    */
   uploadedAvatarUrl?: string
-  premiumFeatures?: string[]
-  /** @example false */
-  isAaMastered?: boolean
-  /** @example "48427" */
-  ixUpdate?: number
-  idBoardsPinned?: TrelloID[] | null
+  /**
+   * @format url
+   * @example "https://trello.com/bentleycook"
+   */
+  url?: string
+  /** @example "bentleycook" */
+  username?: string
 }
 
-export interface MemberPrefs {
+export enum MemberFields {
+  Id = 'id'
+}
+
+export interface IMemberPrefs {
+  /** @example true */
+  colorBlind?: boolean
+  /** @example "en-AU" */
+  locale?: string
+  /** @example 1440 */
+  minutesBeforeDeadlineToNotify?: number
+  /** @example 60 */
+  minutesBetweenSummaries?: number
+  privacy?: {
+    /** @example "public" */
+    fullName?: 'public' | 'private' | 'collaborator'
+    /** @example "public" */
+    avatar?: 'public' | 'private' | 'collaborator'
+  }
+  /** @example true */
+  sendSummaries?: boolean
+  /** @example "America/Chicago" */
+  timezone?: string
   timezoneInfo?: {
     /** @example 360 */
     offsetCurrent?: number
@@ -1036,24 +1013,6 @@ export interface MemberPrefs {
     /** @example "CDT" */
     timezoneNext?: string
   }
-  privacy?: {
-    /** @example "public" */
-    fullName?: 'public' | 'private' | 'collaborator'
-    /** @example "public" */
-    avatar?: 'public' | 'private' | 'collaborator'
-  }
-  /** @example true */
-  sendSummaries?: boolean
-  /** @example 60 */
-  minutesBetweenSummaries?: number
-  /** @example 1440 */
-  minutesBeforeDeadlineToNotify?: number
-  /** @example true */
-  colorBlind?: boolean
-  /** @example "en-AU" */
-  locale?: string
-  /** @example "America/Chicago" */
-  timezone?: string
   twoFactor?: {
     /** @example true */
     enabled?: boolean
@@ -1062,8 +1021,60 @@ export interface MemberPrefs {
   }
 }
 
-export interface Memberships {
+export interface IMembership {
+  admin?: boolean
+  collaborator?: boolean
+  deactivated?: boolean
+  licensed?: boolean
+  managed?: boolean
+  /** @example {"id":"646e92a0a016198d3cf81e8a","fullname":"Lex Math","username":"amath","dateLastImpression":"2023-05-24T22:41:36.406Z","email":"amath@trello.com","initials":"AM","avatarURL":"trello.com/avatarURL","memberType":"Admin","confirmed":true} */
+  member?: {
+    id?: string
+    fullname?: string
+    username?: string
+    dateLastImpression?: string
+    email?: string
+    initials?: string
+    avatarURL?: string
+    memberType?: string
+    confirmed?: boolean
+  }
+}
+
+export interface IMemberships {
   id?: TrelloID
+}
+
+export interface INotification {
+  board?: IBoard
+  card?: ICard
+  /** @example null */
+  data?: string
+  /** @example "2019-11-08T16:02:52.763Z" */
+  date?: string
+  /** @example null */
+  dateRead?: string
+  /** @example "5dc591ac425f2a223aba0a8e" */
+  id?: string
+  /** @example null */
+  idAction?: TrelloID | null
+  /** @example null */
+  idMemberCreator?: TrelloID | null
+  /** @example [] */
+  reactions?: any[]
+  /** @example "cardDueSoon" */
+  type?: 'cardDueSoon'
+  /** @example true */
+  unread?: boolean
+}
+
+export interface INotificationChannelSettings {
+  blockedKeys?: BlockedKey[]
+  channel?: Channel
+  /** @example "5dc591ac425f2a223aba0a8e" */
+  id?: string
+  /** @example "5589c3ea49b40cedc28cf70e" */
+  idMember?: TrelloID
 }
 
 export enum NotificationFields {
@@ -1080,36 +1091,8 @@ export enum NotificationFields {
   Reactions = 'reactions'
 }
 
-export interface Notification {
-  /** @example "5dc591ac425f2a223aba0a8e" */
-  id?: string
-  /** @example true */
-  unread?: boolean
-  /** @example "cardDueSoon" */
-  type?: 'cardDueSoon'
-  /** @example "2019-11-08T16:02:52.763Z" */
-  date?: string
-  /** @example null */
-  dateRead?: string
-  /** @example null */
-  data?: string
-  card?: Card
-  board?: Board
-  /** @example null */
-  idMemberCreator?: TrelloID | null
-  /** @example null */
-  idAction?: TrelloID | null
-  /** @example [] */
-  reactions?: any[]
-}
-
-export interface NotificationChannelSettings {
-  /** @example "5dc591ac425f2a223aba0a8e" */
-  id?: string
-  /** @example "5589c3ea49b40cedc28cf70e" */
-  idMember?: TrelloID
-  blockedKeys?: BlockedKey[]
-  channel?: Channel
+export interface IOrganization {
+  id?: TrelloID
 }
 
 export enum OrganizationFields {
@@ -1117,21 +1100,7 @@ export enum OrganizationFields {
   Name = 'name'
 }
 
-export interface Organization {
-  id?: TrelloID
-}
-
-export interface PendingOrganizations {
-  /** @example "617ac9070293e6612650e0ca" */
-  id?: TrelloID
-  /** @example "5589c3ea49b40cedc28cf70e" */
-  idMember?: TrelloID
-  memberRequestor?: {
-    /** @example "59cd149051aa57a706962996" */
-    id?: TrelloID
-    /** @example "Bob Loblaw (Trello)" */
-    fullName?: string
-  }
+export interface IPendingOrganizations {
   /**
    * @format date
    * @example "2018-10-17T19:10:14.808Z"
@@ -1139,10 +1108,20 @@ export interface PendingOrganizations {
   date?: string
   /** @example "Organization Name" */
   displayName?: string
-  /** @example 2 */
-  membershipCount?: number
+  /** @example "617ac9070293e6612650e0ca" */
+  id?: TrelloID
+  /** @example "5589c3ea49b40cedc28cf70e" */
+  idMember?: TrelloID
   /** @example null */
   logoUrl?: string | null
+  memberRequestor?: {
+    /** @example "59cd149051aa57a706962996" */
+    id?: TrelloID
+    /** @example "Bob Loblaw (Trello)" */
+    fullName?: string
+  }
+  /** @example 2 */
+  membershipCount?: number
   transferability?: {
     /** @example true */
     transferrable?: boolean
@@ -1173,107 +1152,86 @@ export interface PendingOrganizations {
   }
 }
 
-export interface Plugin {
+export interface IPlugin {
   id?: TrelloID
 }
 
-export interface PluginData {
+export interface IPluginData {
+  /** @example "private" */
+  access?: 'private' | 'shared'
   /** @example "5c487f39294cab6ac1d6b305" */
   id?: TrelloID
+  /** @example "586e8d7b1af892b26d5b76b1" */
+  idModel?: TrelloID
   /** @example "55a5d915446f517774210003" */
   idPlugin?: TrelloID
   /** @example "organization" */
   scope?: 'member' | 'board' | 'organization' | 'card'
-  /** @example "586e8d7b1af892b26d5b76b1" */
-  idModel?: TrelloID
   /** @example "{"token":"S=s458:U=bda7cda:E=16fd2e21f55:C=1687b30f2c0:P=185:A=it-team-0604:V=2:H=3b0f3bac9c2a2af766202ebb9530a4a5"}" */
   value?: string
-  /** @example "private" */
-  access?: 'private' | 'shared'
 }
 
-export interface PluginListing {
-  /** @example "5a7cd2f8f99c517f58da1579" */
-  id?: TrelloID
-  /** @example "Attachment Section Example" */
-  name?: string
-  /** @example "en-US" */
-  locale?: string
+export interface IPluginListing {
   /** @example "The [Glitch](https://glitch.com) Power-Up allows you to..." */
   description?: string
+  /** @example "5a7cd2f8f99c517f58da1579" */
+  id?: TrelloID
+  /** @example "en-US" */
+  locale?: string
+  /** @example "Attachment Section Example" */
+  name?: string
   /** @example "" */
   overview?: string
 }
 
-export interface Prefs {
-  permissionLevel?: 'org' | 'board'
-  hideVotes?: boolean
-  voting?: 'disabled' | 'enabled'
-  comments?: string
-  invitations?: 'admins' | 'members'
-  selfJoin?: boolean
-  cardCovers?: boolean
-  isTemplate?: boolean
-  cardAging?: CardAging
-  calendarFeedEnabled?: boolean
+export interface IPrefs {
   background?: TrelloID
-  /** @format uri */
-  backgroundImage?: string
-  backgroundImageScaled?: ImageDescriptor[]
-  backgroundTile?: boolean
-  /** @example "dark" */
-  backgroundBrightness?: string
   /** @example "#1e2e00" */
   backgroundBottomColor?: string
+  /** @example "dark" */
+  backgroundBrightness?: string
+  /** @format uri */
+  backgroundImage?: string
+  backgroundImageScaled?: IImageDescriptor[]
+  backgroundTile?: boolean
   /** @example "#ffffff" */
   backgroundTopColor?: string
-  canBePublic?: boolean
+  calendarFeedEnabled?: boolean
   canBeEnterprise?: boolean
   canBeOrg?: boolean
   canBePrivate?: boolean
+  canBePublic?: boolean
   canInvite?: boolean
+  cardAging?: CardAging
+  cardCovers?: boolean
+  comments?: string
+  hideVotes?: boolean
+  invitations?: 'admins' | 'members'
+  isTemplate?: boolean
+  permissionLevel?: 'org' | 'board'
+  selfJoin?: boolean
+  voting?: 'disabled' | 'enabled'
 }
 
-export interface SavedSearch {
+export interface ISavedSearch {
   /** @example "5589b47349b40cedc28ceae2" */
   id?: TrelloID
   /** @example "My Cards" */
   name?: string
+  /** @example 1638 */
+  pos?: IPosStringOrNumber
   /** @example "@me" */
   query?: string
-  /** @example 1638 */
-  pos?: PosStringOrNumber
 }
 
-export interface Tag {
+export interface ITag {
   /** @example "58dd6dcaf8b86744d3cb4cde" */
   id?: TrelloID
   /** @example "My Collection" */
   name?: string
 }
 
-export interface TokenPermission {
-  idModel?: TrelloID | '*'
-  modelType?: 'board' | 'member' | 'organization' | 'enterprise'
-  read?: boolean
-  write?: boolean
-}
-
-export enum TokenFields {
-  Identifier = 'identifier',
-  IdMember = 'idMember',
-  DateCreated = 'dateCreated',
-  DateExpires = 'dateExpires',
-  Permissions = 'permissions'
-}
-
-export interface Token {
-  /** @example "5da728c55235b443c5b97181" */
-  id?: TrelloID
-  /** @example "App Name" */
-  identifier?: string
-  /** @example "5589c3ea49b40cedc28cf70e" */
-  idMember?: TrelloID
+export interface IToken {
   /**
    * @format date-time
    * @example "2019-10-16T14:27:17.304Z"
@@ -1284,12 +1242,31 @@ export interface Token {
    * @example null
    */
   dateExpires?: string | null
-  permissions?: TokenPermission[]
+  /** @example "5da728c55235b443c5b97181" */
+  id?: TrelloID
+  /** @example "5589c3ea49b40cedc28cf70e" */
+  idMember?: TrelloID
+  /** @example "App Name" */
+  identifier?: string
+  permissions?: ITokenPermission[]
 }
 
-export interface TransferrableOrganization {
-  /** @example true */
-  transferrable?: boolean
+export enum TokenFields {
+  Identifier = 'identifier',
+  IdMember = 'idMember',
+  DateCreated = 'dateCreated',
+  DateExpires = 'dateExpires',
+  Permissions = 'permissions'
+}
+
+export interface ITokenPermission {
+  idModel?: TrelloID | '*'
+  modelType?: 'board' | 'member' | 'organization' | 'enterprise'
+  read?: boolean
+  write?: boolean
+}
+
+export interface ITransferrableOrganization {
   newBillableMembers?: {
     /** @example "5ab10be237846c43015f1091" */
     id?: TrelloID
@@ -1314,40 +1291,63 @@ export interface TransferrableOrganization {
     /** @example "fc8faaaee46666a4eb8b626c08933e16" */
     avatarHash?: string
   }[]
+  /** @example true */
+  transferrable?: boolean
 }
 
-export interface Webhook {
-  /** @example "58dd6dcaf8b86744d3cb4cde" */
+/**
+ * @pattern ^[0-9a-fA-F]{24}$
+ * @example "5abbe4b7ddc1b351ef961414"
+ */
+export type TrelloID = string
+
+export interface ITrelloList {
+  closed?: boolean
   id?: TrelloID
-  /** @example "Board Webhook" */
-  description?: string
-  /** @example "59cd149051aa57a706962996" */
-  idModel?: TrelloID
+  idBoard?: string
+  limits?: ILimits
+  /**
+   * The name of the list
+   * @example "Things to buy today"
+   */
+  name?: string
+  pos?: number
+  softLimit?: string
+  subscribed?: boolean
+}
+
+export enum ViewFilter {
+  All = 'all',
+  Closed = 'closed',
+  None = 'none',
+  Open = 'open'
+}
+
+export interface IWebhook {
+  /** @example true */
+  active?: boolean
   /**
    * @format url
    * @example "https://mywebhookurl.com/?type=board"
    */
   callbackURL?: string
-  /** @example true */
-  active?: boolean
   /** @example 0 */
   consecutiveFailures?: number
+  /** @example "Board Webhook" */
+  description?: string
   /**
    * @format date
    * @example null
    */
   firstConsecutiveFailDate?: string | null
+  /** @example "58dd6dcaf8b86744d3cb4cde" */
+  id?: TrelloID
+  /** @example "59cd149051aa57a706962996" */
+  idModel?: TrelloID
 }
 
-export interface Error {
-  code: string
-  message: string
-}
-
-export interface CFValue {
-  number?: string
-}
-
-export interface CustomFieldItemValue {
+export interface ICustomFieldItemValue {
   value?: object
 }
+
+export type IPosStringOrNumber = 'top' | 'bottom' | number

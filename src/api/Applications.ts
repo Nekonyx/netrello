@@ -21,12 +21,12 @@ export class Applications {
   /**
    * No description
    *
-   * @name ApplicationsKeyCompliance
+   * @name GetComplianceKey
    * @summary Get Application's compliance data
    * @request GET:/applications/{key}/compliance
    * @secure
    */
-  public async applicationsKeyCompliance(
+  public async getComplianceKey(
     key: string,
     params: IRequestParams = {}
   ): Promise<void> {

@@ -10,12 +10,12 @@
  */
 
 import {
-  Member,
+  IMember,
+  IToken,
+  IWebhook,
   MemberFields,
-  Token,
   TokenFields,
-  TrelloID,
-  Webhook
+  TrelloID
 } from './data-contracts'
 import { HttpClient, IRequestParams } from './http-client'
 
@@ -29,12 +29,12 @@ export class Tokens {
   /**
    * Retrieve information about a token.
    *
-   * @name GetTokensToken
+   * @name GetToken
    * @summary Get a Token
    * @request GET:/tokens/{token}
    * @secure
    */
-  public async getTokensToken(
+  public async getToken(
     token: string,
     query?: {
       /**
@@ -49,8 +49,8 @@ export class Tokens {
       webhooks?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<Token> {
-    return this.client.request<Token>({
+  ): Promise<IToken> {
+    return this.client.request<IToken>({
       path: `/tokens/${token}`,
       method: 'GET',
       query: query,
@@ -62,12 +62,12 @@ export class Tokens {
   /**
    * Retrieve information about a token's owner by token.
    *
-   * @name GetTokensTokenMember
+   * @name GetMemberToken
    * @summary Get Token's Member
    * @request GET:/tokens/{token}/member
    * @secure
    */
-  public async getTokensTokenMember(
+  public async getMemberToken(
     token: string,
     query?: {
       /**
@@ -77,8 +77,8 @@ export class Tokens {
       fields?: MemberFields
     },
     params: IRequestParams = {}
-  ): Promise<Member> {
-    return this.client.request<Member>({
+  ): Promise<IMember> {
+    return this.client.request<IMember>({
       path: `/tokens/${token}/member`,
       method: 'GET',
       query: query,
@@ -90,16 +90,16 @@ export class Tokens {
   /**
    * Retrieve all webhooks created with a Token.
    *
-   * @name GetTokensTokenWebhooks
+   * @name GetWebhooksToken
    * @summary Get Webhooks for Token
    * @request GET:/tokens/{token}/webhooks
    * @secure
    */
-  public async getTokensTokenWebhooks(
+  public async getWebhooksToken(
     token: string,
     params: IRequestParams = {}
-  ): Promise<Webhook[]> {
-    return this.client.request<Webhook[]>({
+  ): Promise<IWebhook[]> {
+    return this.client.request<IWebhook[]>({
       path: `/tokens/${token}/webhooks`,
       method: 'GET',
       secure: true,
@@ -110,12 +110,12 @@ export class Tokens {
   /**
    * Create a new webhook for a Token.
    *
-   * @name PostTokensTokenWebhooks
+   * @name CreateWebhooksToken
    * @summary Create Webhooks for Token
    * @request POST:/tokens/{token}/webhooks
    * @secure
    */
-  public async postTokensTokenWebhooks(
+  public async createWebhooksToken(
     token: string,
     query: {
       /** A description to be displayed when retrieving information about the webhook. */
@@ -129,8 +129,8 @@ export class Tokens {
       idModel: TrelloID
     },
     params: IRequestParams = {}
-  ): Promise<Webhook> {
-    return this.client.request<Webhook>({
+  ): Promise<IWebhook> {
+    return this.client.request<IWebhook>({
       path: `/tokens/${token}/webhooks`,
       method: 'POST',
       query: query,
@@ -142,17 +142,17 @@ export class Tokens {
   /**
    * Retrieve a webhook created with a Token.
    *
-   * @name GetTokensTokenWebhooksIdwebhook
+   * @name GetWebhooksTokenIdWebhook
    * @summary Get a Webhook belonging to a Token
    * @request GET:/tokens/{token}/webhooks/{idWebhook}
    * @secure
    */
-  public async getTokensTokenWebhooksIdwebhook(
+  public async getWebhooksTokenIdWebhook(
     token: string,
     idWebhook: TrelloID,
     params: IRequestParams = {}
-  ): Promise<Webhook> {
-    return this.client.request<Webhook>({
+  ): Promise<IWebhook> {
+    return this.client.request<IWebhook>({
       path: `/tokens/${token}/webhooks/${idWebhook}`,
       method: 'GET',
       secure: true,
@@ -163,12 +163,12 @@ export class Tokens {
   /**
    * Delete a webhook created with given token.
    *
-   * @name DeleteTokensTokenWebhooksIdwebhook
+   * @name DeleteWebhooksTokenIdWebhook
    * @summary Delete a Webhook created by Token
    * @request DELETE:/tokens/{token}/webhooks/{idWebhook}
    * @secure
    */
-  public async deleteTokensTokenWebhooksIdwebhook(
+  public async deleteWebhooksTokenIdWebhook(
     token: string,
     idWebhook: TrelloID,
     params: IRequestParams = {}
@@ -184,12 +184,12 @@ export class Tokens {
   /**
    * Update a Webhook created by Token
    *
-   * @name Tokenstokenwebhooks1
+   * @name UpdateWebhooksTokenIdWebhook
    * @summary Update a Webhook created by Token
    * @request PUT:/tokens/{token}/webhooks/{idWebhook}
    * @secure
    */
-  public async tokenstokenwebhooks1(
+  public async updateWebhooksTokenIdWebhook(
     token: string,
     idWebhook: TrelloID,
     query?: {

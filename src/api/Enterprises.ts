@@ -11,17 +11,17 @@
 
 import {
   BoardFields,
-  ClaimableOrganizations,
-  Enterprise,
-  EnterpriseAdmin,
-  EnterpriseAuditLog,
-  Member,
+  IClaimableOrganizations,
+  IEnterprise,
+  IEnterpriseAdmin,
+  IEnterpriseAuditLog,
+  IMember,
+  IMembership,
+  IOrganization,
+  IPendingOrganizations,
+  ITransferrableOrganization,
   MemberFields,
-  Membership,
-  Organization,
   OrganizationFields,
-  PendingOrganizations,
-  TransferrableOrganization,
   TrelloID
 } from './data-contracts'
 import { HttpClient, IRequestParams } from './http-client'
@@ -36,12 +36,12 @@ export class Enterprises {
   /**
    * Get an enterprise by its ID.
    *
-   * @name GetEnterprisesId
+   * @name Get
    * @summary Get an Enterprise
    * @request GET:/enterprises/{id}
    * @secure
    */
-  public async getEnterprisesId(
+  public async get(
     id: TrelloID,
     query?: {
       /**
@@ -110,8 +110,8 @@ export class Enterprises {
       organization_memberships?: string
     },
     params: IRequestParams = {}
-  ): Promise<Enterprise> {
-    return this.client.request<Enterprise>({
+  ): Promise<IEnterprise> {
+    return this.client.request<IEnterprise>({
       path: `/enterprises/${id}`,
       method: 'GET',
       query: query,
@@ -123,16 +123,16 @@ export class Enterprises {
   /**
    * Returns an array of Actions related to the Enterprise object. Used for populating data sent to Google Sheets from an Enterprise's audit log page: https://trello.com/e/{enterprise_name}/admin/auditlog. An Enterprise admin token is required for this route. NOTE: For enterprises that have opted in to user management via AdminHub, the auditlog will will contain actions taken in AdminHub, but may not contain the source for those actions.
    *
-   * @name GetEnterprisesIdAuditlog
+   * @name GetAuditlog
    * @summary Get auditlog data for an Enterprise
    * @request GET:/enterprises/{id}/auditlog
    * @secure
    */
-  public async getEnterprisesIdAuditlog(
+  public async getAuditlog(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<EnterpriseAuditLog[]> {
-    return this.client.request<EnterpriseAuditLog[]>({
+  ): Promise<IEnterpriseAuditLog[]> {
+    return this.client.request<IEnterpriseAuditLog[]>({
       path: `/enterprises/${id}/auditlog`,
       method: 'GET',
       secure: true,
@@ -143,12 +143,12 @@ export class Enterprises {
   /**
    * Get an enterprise's admin members.
    *
-   * @name GetEnterprisesIdAdmins
+   * @name GetAdmins
    * @summary Get Enterprise admin Members
    * @request GET:/enterprises/{id}/admins
    * @secure
    */
-  public async getEnterprisesIdAdmins(
+  public async getAdmins(
     id: TrelloID,
     query?: {
       /**
@@ -158,8 +158,8 @@ export class Enterprises {
       fields?: string
     },
     params: IRequestParams = {}
-  ): Promise<EnterpriseAdmin> {
-    return this.client.request<EnterpriseAdmin>({
+  ): Promise<IEnterpriseAdmin> {
+    return this.client.request<IEnterpriseAdmin>({
       path: `/enterprises/${id}/admins`,
       method: 'GET',
       query: query,
@@ -171,12 +171,12 @@ export class Enterprises {
   /**
    * Get the signup URL for an enterprise.
    *
-   * @name GetEnterprisesIdSignupurl
+   * @name GetSignupUrl
    * @summary Get signupUrl for Enterprise
    * @request GET:/enterprises/{id}/signupUrl
    * @secure
    */
-  public async getEnterprisesIdSignupurl(
+  public async getSignupUrl(
     id: TrelloID,
     query?: {
       /** @default false */
@@ -213,12 +213,12 @@ export class Enterprises {
   /**
    * [BETA] - Get an enterprise's users. You can choose to retrieve licensed members, board guests, etc.
    *
-   * @name GetUsersId
+   * @name GetMembersQuery
    * @summary Get Users of an Enterprise
    * @request GET:/enterprises/{id}/members/query
    * @secure
    */
-  public async getUsersId(
+  public async getMembersQuery(
     id: TrelloID,
     query?: {
       /**
@@ -268,8 +268,8 @@ export class Enterprises {
       startIndex?: string
     },
     params: IRequestParams = {}
-  ): Promise<Membership[]> {
-    return this.client.request<Membership[]>({
+  ): Promise<IMembership[]> {
+    return this.client.request<IMembership[]>({
       path: `/enterprises/${id}/members/query`,
       method: 'GET',
       query: query,
@@ -281,12 +281,12 @@ export class Enterprises {
   /**
    * Get the members of an enterprise.
    *
-   * @name GetEnterprisesIdMembers
+   * @name GetMembers
    * @summary Get Members of Enterprise
    * @request GET:/enterprises/{id}/members
    * @secure
    */
-  public async getEnterprisesIdMembers(
+  public async getMembers(
     id: TrelloID,
     query?: {
       /**
@@ -329,8 +329,8 @@ export class Enterprises {
       board_fields?: string
     },
     params: IRequestParams = {}
-  ): Promise<Member[]> {
-    return this.client.request<Member[]>({
+  ): Promise<IMember[]> {
+    return this.client.request<IMember[]>({
       path: `/enterprises/${id}/members`,
       method: 'GET',
       query: query,
@@ -342,12 +342,12 @@ export class Enterprises {
   /**
    * Get a specific member of an enterprise by ID.
    *
-   * @name GetEnterprisesIdMembersIdmember
+   * @name GetMembersIdMember
    * @summary Get a Member of Enterprise
    * @request GET:/enterprises/{id}/members/{idMember}
    * @secure
    */
-  public async getEnterprisesIdMembersIdmember(
+  public async getMembersIdMember(
     id: TrelloID,
     idMember: TrelloID,
     query?: {
@@ -368,8 +368,8 @@ export class Enterprises {
       board_fields?: string
     },
     params: IRequestParams = {}
-  ): Promise<Member> {
-    return this.client.request<Member>({
+  ): Promise<IMember> {
+    return this.client.request<IMember>({
       path: `/enterprises/${id}/members/${idMember}`,
       method: 'GET',
       query: query,
@@ -381,17 +381,17 @@ export class Enterprises {
   /**
    * Get whether an organization can be transferred to an enterprise.
    *
-   * @name GetEnterprisesIdTransferrableOrganizationIdOrganization
+   * @name GetTransferrableOrganizationIdOrganization
    * @summary Get whether an organization can be transferred to an enterprise.
    * @request GET:/enterprises/{id}/transferrable/organization/{idOrganization}
    * @secure
    */
-  public async getEnterprisesIdTransferrableOrganizationIdOrganization(
+  public async getTransferrableOrganizationIdOrganization(
     id: TrelloID,
     idOrganization: TrelloID,
     params: IRequestParams = {}
-  ): Promise<TransferrableOrganization> {
-    return this.client.request<TransferrableOrganization>({
+  ): Promise<ITransferrableOrganization> {
+    return this.client.request<ITransferrableOrganization>({
       path: `/enterprises/${id}/transferrable/organization/${idOrganization}`,
       method: 'GET',
       secure: true,
@@ -402,17 +402,17 @@ export class Enterprises {
   /**
    * Get a list of organizations that can be transferred to an enterprise when given a bulk list of organizations.
    *
-   * @name GetEnterprisesIdTransferrableBulkIdOrganizations
+   * @name GetTransferrableBulkIdOrganizations
    * @summary Get a bulk list of organizations that can be transferred to an enterprise.
    * @request GET:/enterprises/{id}/transferrable/bulk/{idOrganizations}
    * @secure
    */
-  public async getEnterprisesIdTransferrableBulkIdOrganizations(
+  public async getTransferrableBulkIdOrganizations(
     id: TrelloID,
-    idOrganizations: Organization[],
+    idOrganizations: IOrganization[],
     params: IRequestParams = {}
-  ): Promise<TransferrableOrganization[]> {
-    return this.client.request<TransferrableOrganization[]>({
+  ): Promise<ITransferrableOrganization[]> {
+    return this.client.request<ITransferrableOrganization[]>({
       path: `/enterprises/${id}/transferrable/bulk/${idOrganizations}`,
       method: 'GET',
       secure: true,
@@ -423,16 +423,16 @@ export class Enterprises {
   /**
    * Decline enterpriseJoinRequests from one organization or bulk amount of organizations
    *
-   * @name PutEnterprisesIdEnterpriseJoinRequestBulk
+   * @name UpdateEnterpriseJoinRequestBulk
    * @summary Decline enterpriseJoinRequests from one organization or a bulk list of organizations.
    * @request PUT:/enterprises/${id}/enterpriseJoinRequest/bulk
    * @secure
    */
-  public async putEnterprisesIdEnterpriseJoinRequestBulk(
+  public async updateEnterpriseJoinRequestBulk(
     id: TrelloID,
     query: {
       /** An array of IDs of an Organization resource. */
-      idOrganizations: Organization[]
+      idOrganizations: IOrganization[]
     },
     params: IRequestParams = {}
   ): Promise<void> {
@@ -448,12 +448,12 @@ export class Enterprises {
   /**
    * Get the Workspaces that are claimable by the enterprise by ID. Can optionally query for workspaces based on activeness/ inactiveness.
    *
-   * @name GetEnterprisesIdClaimableOrganizations
+   * @name GetClaimableOrganizations
    * @summary Get ClaimableOrganizations of an Enterprise
    * @request GET:/enterprises/{id}/claimableOrganizations
    * @secure
    */
-  public async getEnterprisesIdClaimableOrganizations(
+  public async getClaimableOrganizations(
     id: TrelloID,
     query?: {
       /** Limits the number of workspaces to be sorted */
@@ -468,8 +468,8 @@ export class Enterprises {
       inactiveSince?: string
     },
     params: IRequestParams = {}
-  ): Promise<ClaimableOrganizations> {
-    return this.client.request<ClaimableOrganizations>({
+  ): Promise<IClaimableOrganizations> {
+    return this.client.request<IClaimableOrganizations>({
       path: `/enterprises/${id}/claimableOrganizations`,
       method: 'GET',
       query: query,
@@ -481,12 +481,12 @@ export class Enterprises {
   /**
    * Get the Workspaces that are pending for the enterprise by ID.
    *
-   * @name GetEnterprisesIdPendingOrganizations
+   * @name GetPendingOrganizations
    * @summary Get PendingOrganizations of an Enterprise
    * @request GET:/enterprises/{id}/pendingOrganizations
    * @secure
    */
-  public async getEnterprisesIdPendingOrganizations(
+  public async getPendingOrganizations(
     id: TrelloID,
     query?: {
       /** Date in YYYY-MM-DD format indicating the date to search up to for activeness of workspace */
@@ -495,8 +495,8 @@ export class Enterprises {
       inactiveSince?: string
     },
     params: IRequestParams = {}
-  ): Promise<PendingOrganizations[]> {
-    return this.client.request<PendingOrganizations[]>({
+  ): Promise<IPendingOrganizations[]> {
+    return this.client.request<IPendingOrganizations[]>({
       path: `/enterprises/${id}/pendingOrganizations`,
       method: 'GET',
       query: query,
@@ -508,12 +508,12 @@ export class Enterprises {
   /**
    * Create an auth Token for an Enterprise.
    *
-   * @name PostEnterprisesIdTokens
+   * @name CreateTokens
    * @summary Create an auth Token for an Enterprise.
    * @request POST:/enterprises/{id}/tokens
    * @secure
    */
-  public async postEnterprisesIdTokens(
+  public async createTokens(
     id: string,
     query?: {
       /**
@@ -536,20 +536,20 @@ export class Enterprises {
   /**
    * Transfer an organization to an enterprise. NOTE: For enterprises that have opted in to user management via AdminHub, this endpoint will result in the organization being added to the enterprise asynchronously. A 200 response only indicates receipt of the request, it does not indicate successful addition to the enterprise.
    *
-   * @name PutEnterprisesIdOrganizations
+   * @name UpdateOrganizations
    * @summary Transfer an Organization to an Enterprise.
    * @request PUT:/enterprises/{id}/organizations
    * @secure
    */
-  public async putEnterprisesIdOrganizations(
+  public async updateOrganizations(
     id: TrelloID,
     query: {
       /** ID of Organization to be transferred to Enterprise. */
       idOrganization: string
     },
     params: IRequestParams = {}
-  ): Promise<Organization[]> {
-    return this.client.request<Organization[]>({
+  ): Promise<IOrganization[]> {
+    return this.client.request<IOrganization[]>({
       path: `/enterprises/${id}/organizations`,
       method: 'PUT',
       query: query,
@@ -561,12 +561,12 @@ export class Enterprises {
   /**
    * This endpoint is used to update whether the provided Member should use one of the Enterprise's available licenses or not. Revoking a license will deactivate a Member of an Enterprise. NOTE: Revoking of licenses is not possible for enterprises that have opted in to user management via AdminHub.
    *
-   * @name PutEnterprisesIdMembersIdmemberLicensed
+   * @name UpdateMembersLicensedIdMember
    * @summary Update a Member's licensed status
    * @request PUT:/enterprises/{id}/members/{idMember}/licensed
    * @secure
    */
-  public async putEnterprisesIdMembersIdmemberLicensed(
+  public async updateMembersLicensedIdMember(
     id: TrelloID,
     idMember: TrelloID,
     query: {
@@ -574,8 +574,8 @@ export class Enterprises {
       value: boolean
     },
     params: IRequestParams = {}
-  ): Promise<Member> {
-    return this.client.request<Member>({
+  ): Promise<IMember> {
+    return this.client.request<IMember>({
       path: `/enterprises/${id}/members/${idMember}/licensed`,
       method: 'PUT',
       query: query,
@@ -587,12 +587,12 @@ export class Enterprises {
   /**
    * Deactivate a Member of an Enterprise. NOTE: Deactivation is not possible for enterprises that have opted in to user management via AdminHub.
    *
-   * @name EnterprisesIdMembersIdMemberDeactivated
+   * @name UpdateMembersDeactivatedIdMember
    * @summary Deactivate a Member of an Enterprise.
    * @request PUT:/enterprises/{id}/members/{idMember}/deactivated
    * @secure
    */
-  public async enterprisesIdMembersIdMemberDeactivated(
+  public async updateMembersDeactivatedIdMember(
     id: TrelloID,
     idMember: TrelloID,
     query: {
@@ -628,12 +628,12 @@ export class Enterprises {
   /**
    * Make Member an admin of Enterprise. NOTE: This endpoint is not available to enterprises that have opted in to user management via AdminHub.
    *
-   * @name PutEnterprisesIdAdminsIdmember
+   * @name UpdateAdminsIdMember
    * @summary Update Member to be admin of Enterprise
    * @request PUT:/enterprises/{id}/admins/{idMember}
    * @secure
    */
-  public async putEnterprisesIdAdminsIdmember(
+  public async updateAdminsIdMember(
     id: TrelloID,
     idMember: TrelloID,
     params: IRequestParams = {}
@@ -649,12 +649,12 @@ export class Enterprises {
   /**
    * Remove a member as admin from an enterprise. NOTE: This endpoint is not available to enterprises that have opted in to user management via AdminHub.
    *
-   * @name EnterprisesIdOrganizationsIdmember
+   * @name DeleteAdminsIdMember
    * @summary Remove a Member as admin from Enterprise.
    * @request DELETE:/enterprises/{id}/admins/{idMember}
    * @secure
    */
-  public async enterprisesIdOrganizationsIdmember(
+  public async deleteAdminsIdMember(
     id: TrelloID,
     idMember: TrelloID,
     params: IRequestParams = {}
@@ -670,12 +670,12 @@ export class Enterprises {
   /**
    * Remove an organization from an enterprise.
    *
-   * @name DeleteEnterprisesIdOrganizationsIdorg
+   * @name DeleteOrganizationsIdOrg
    * @summary Delete an Organization from an Enterprise.
    * @request DELETE:/enterprises/{id}/organizations/{idOrg}
    * @secure
    */
-  public async deleteEnterprisesIdOrganizationsIdorg(
+  public async deleteOrganizationsIdOrg(
     id: TrelloID,
     idOrg: TrelloID,
     params: IRequestParams = {}
@@ -691,14 +691,14 @@ export class Enterprises {
   /**
    * Accept an array of organizations to an enterprise. NOTE: For enterprises that have opted in to user management via AdminHub, this endpoint will result in organizations being added to the enterprise asynchronously. A 200 response only indicates receipt of the request, it does not indicate successful addition to the enterprise.
    *
-   * @name GetEnterprisesIdOrganizationsBulkIdOrganizations
+   * @name GetOrganizationsBulkIdOrganizations
    * @summary Bulk accept a set of organizations to an Enterprise.
    * @request GET:/enterprises/{id}/organizations/bulk/{idOrganizations}
    * @secure
    */
-  public async getEnterprisesIdOrganizationsBulkIdOrganizations(
+  public async getOrganizationsBulkIdOrganizations(
     id: TrelloID,
-    idOrganizations: Organization[],
+    idOrganizations: IOrganization[],
     params: IRequestParams = {}
   ): Promise<void> {
     return this.client.request<void>({

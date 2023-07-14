@@ -21,12 +21,12 @@ export class Batch {
   /**
    * Make up to 10 GET requests in a single, batched API call.
    *
-   * @name GetBatch
+   * @name Get
    * @summary Batch Requests
    * @request GET:/batch
    * @secure
    */
-  public async getBatch(
+  public async get(
     query: {
       /** A list of API routes. Maximum of 10 routes allowed. The routes should begin with a forward slash and should not include the API version number - e.g. "urls=/members/trello,/cards/[cardId]" */
       urls: string

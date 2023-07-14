@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { TrelloID, Webhook } from './data-contracts'
+import { IWebhook, TrelloID } from './data-contracts'
 import { HttpClient, IRequestParams } from './http-client'
 
 export class Webhooks {
@@ -22,12 +22,12 @@ export class Webhooks {
   /**
    * Create a new webhook.
    *
-   * @name PostWebhooks
+   * @name Create
    * @summary Create a Webhook
    * @request POST:/webhooks/
    * @secure
    */
-  public async postWebhooks(
+  public async create(
     query: {
       /**
        * A string with a length from `0` to `16384`.
@@ -46,8 +46,8 @@ export class Webhooks {
       active?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<Webhook> {
-    return this.client.request<Webhook>({
+  ): Promise<IWebhook> {
+    return this.client.request<IWebhook>({
       path: `/webhooks/`,
       method: 'POST',
       query: query,
@@ -59,16 +59,16 @@ export class Webhooks {
   /**
    * Get a webhook by ID. You must use the token query parameter and pass in the token the webhook was created under, or else you will encounter a 'webhook does not belong to token' error.
    *
-   * @name GetWebhooksId
+   * @name Get
    * @summary Get a Webhook
    * @request GET:/webhooks/{id}
    * @secure
    */
-  public async getWebhooksId(
+  public async get(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<Webhook> {
-    return this.client.request<Webhook>({
+  ): Promise<IWebhook> {
+    return this.client.request<IWebhook>({
       path: `/webhooks/${id}`,
       method: 'GET',
       secure: true,
@@ -79,12 +79,12 @@ export class Webhooks {
   /**
    * Update a webhook by ID.
    *
-   * @name PutWebhooksId
+   * @name Update
    * @summary Update a Webhook
    * @request PUT:/webhooks/{id}
    * @secure
    */
-  public async putWebhooksId(
+  public async update(
     id: TrelloID,
     query?: {
       /**
@@ -104,8 +104,8 @@ export class Webhooks {
       active?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<Webhook> {
-    return this.client.request<Webhook>({
+  ): Promise<IWebhook> {
+    return this.client.request<IWebhook>({
       path: `/webhooks/${id}`,
       method: 'PUT',
       query: query,
@@ -117,12 +117,12 @@ export class Webhooks {
   /**
    * Delete a webhook by ID.
    *
-   * @name DeleteWebhooksId
+   * @name Delete
    * @summary Delete a Webhook
    * @request DELETE:/webhooks/{id}
    * @secure
    */
-  public async deleteWebhooksId(
+  public async delete(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -137,12 +137,12 @@ export class Webhooks {
   /**
    * Get a field on a Webhook
    *
-   * @name Webhooksidfield
+   * @name GetField
    * @summary Get a field on a Webhook
    * @request GET:/webhooks/{id}/{field}
    * @secure
    */
-  public async webhooksidfield(
+  public async getField(
     id: TrelloID,
     field:
       | 'active'

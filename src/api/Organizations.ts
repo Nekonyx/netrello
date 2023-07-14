@@ -10,16 +10,16 @@
  */
 
 import {
-  Action,
-  Board,
   BoardFields,
-  Export,
-  Member,
-  Memberships,
-  Organization,
+  IAction,
+  IBoard,
+  IExport,
+  IMember,
+  IMemberships,
+  IOrganization,
+  IPluginData,
+  ITag,
   OrganizationFields,
-  PluginData,
-  Tag,
   TrelloID
 } from './data-contracts'
 import { HttpClient, IRequestParams } from './http-client'
@@ -34,12 +34,12 @@ export class Organizations {
   /**
    * Create a new Workspace
    *
-   * @name PostOrganizations
+   * @name Create
    * @summary Create a new Organization
    * @request POST:/organizations
    * @secure
    */
-  public async postOrganizations(
+  public async create(
     query: {
       /** The name to display for the Organization */
       displayName: string
@@ -57,8 +57,8 @@ export class Organizations {
       website?: string
     },
     params: IRequestParams = {}
-  ): Promise<Organization> {
-    return this.client.request<Organization>({
+  ): Promise<IOrganization> {
+    return this.client.request<IOrganization>({
       path: `/organizations`,
       method: 'POST',
       query: query,
@@ -70,16 +70,16 @@ export class Organizations {
   /**
    * No description
    *
-   * @name GetOrganizationsId
+   * @name Get
    * @summary Get an Organization
    * @request GET:/organizations/{id}
    * @secure
    */
-  public async getOrganizationsId(
+  public async get(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<Organization> {
-    return this.client.request<Organization>({
+  ): Promise<IOrganization> {
+    return this.client.request<IOrganization>({
       path: `/organizations/${id}`,
       method: 'GET',
       secure: true,
@@ -90,12 +90,12 @@ export class Organizations {
   /**
    * Update an organization
    *
-   * @name PutOrganizationsId
+   * @name Update
    * @summary Update an Organization
    * @request PUT:/organizations/{id}
    * @secure
    */
-  public async putOrganizationsId(
+  public async update(
     id: TrelloID,
     query?: {
       /** A new name for the organization. At least 3 lowercase letters, underscores, and numbers. Must be unique */
@@ -127,8 +127,8 @@ export class Organizations {
       'prefs/permissionLevel'?: string
     },
     params: IRequestParams = {}
-  ): Promise<Organization> {
-    return this.client.request<Organization>({
+  ): Promise<IOrganization> {
+    return this.client.request<IOrganization>({
       path: `/organizations/${id}`,
       method: 'PUT',
       query: query,
@@ -140,12 +140,12 @@ export class Organizations {
   /**
    * Delete an Organization
    *
-   * @name DeleteOrganizationsId
+   * @name Delete
    * @summary Delete an Organization
    * @request DELETE:/organizations/{id}
    * @secure
    */
-  public async deleteOrganizationsId(
+  public async delete(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -160,17 +160,17 @@ export class Organizations {
   /**
    * No description
    *
-   * @name GetOrganizationsIdField
+   * @name GetField
    * @summary Get field on Organization
    * @request GET:/organizations/{id}/{field}
    * @secure
    */
-  public async getOrganizationsIdField(
+  public async getField(
     id: TrelloID,
     field: OrganizationFields,
     params: IRequestParams = {}
-  ): Promise<Organization> {
-    return this.client.request<Organization>({
+  ): Promise<IOrganization> {
+    return this.client.request<IOrganization>({
       path: `/organizations/${id}/${field}`,
       method: 'GET',
       secure: true,
@@ -181,16 +181,16 @@ export class Organizations {
   /**
    * List the actions on a Workspace
    *
-   * @name GetOrganizationsIdActions
+   * @name GetActions
    * @summary Get Actions for Organization
    * @request GET:/organizations/{id}/actions
    * @secure
    */
-  public async getOrganizationsIdActions(
+  public async getActions(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<Action[]> {
-    return this.client.request<Action[]>({
+  ): Promise<IAction[]> {
+    return this.client.request<IAction[]>({
       path: `/organizations/${id}/actions`,
       method: 'GET',
       secure: true,
@@ -201,12 +201,12 @@ export class Organizations {
   /**
    * List the boards in a Workspace
    *
-   * @name GetOrganizationsIdBoards
+   * @name GetBoards
    * @summary Get Boards in an Organization
    * @request GET:/organizations/{id}/boards
    * @secure
    */
-  public async getOrganizationsIdBoards(
+  public async getBoards(
     id: TrelloID,
     query?: {
       /**
@@ -221,8 +221,8 @@ export class Organizations {
       fields?: BoardFields
     },
     params: IRequestParams = {}
-  ): Promise<Board[]> {
-    return this.client.request<Board[]>({
+  ): Promise<IBoard[]> {
+    return this.client.request<IBoard[]>({
       path: `/organizations/${id}/boards`,
       method: 'GET',
       query: query,
@@ -234,12 +234,12 @@ export class Organizations {
   /**
    * Kick off CSV export for an organization
    *
-   * @name PostOrganizationsIdExports
+   * @name CreateExports
    * @summary Create Export for Organizations
    * @request POST:/organizations/{id}/exports
    * @secure
    */
-  public async postOrganizationsIdExports(
+  public async createExports(
     id: TrelloID,
     query?: {
       /**
@@ -249,8 +249,8 @@ export class Organizations {
       attachments?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<Export> {
-    return this.client.request<Export>({
+  ): Promise<IExport> {
+    return this.client.request<IExport>({
       path: `/organizations/${id}/exports`,
       method: 'POST',
       query: query,
@@ -262,16 +262,16 @@ export class Organizations {
   /**
    * Retrieve the exports that exist for the given organization
    *
-   * @name GetOrganizationsIdExports
+   * @name GetExports
    * @summary Retrieve Organization's Exports
    * @request GET:/organizations/{id}/exports
    * @secure
    */
-  public async getOrganizationsIdExports(
+  public async getExports(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<Export[]> {
-    return this.client.request<Export[]>({
+  ): Promise<IExport[]> {
+    return this.client.request<IExport[]>({
       path: `/organizations/${id}/exports`,
       method: 'GET',
       secure: true,
@@ -282,16 +282,16 @@ export class Organizations {
   /**
    * List the members in a Workspace
    *
-   * @name GetOrganizationsIdMembers
+   * @name GetMembers
    * @summary Get the Members of an Organization
    * @request GET:/organizations/{id}/members
    * @secure
    */
-  public async getOrganizationsIdMembers(
+  public async getMembers(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<Member[]> {
-    return this.client.request<Member[]>({
+  ): Promise<IMember[]> {
+    return this.client.request<IMember[]>({
       path: `/organizations/${id}/members`,
       method: 'GET',
       secure: true,
@@ -302,12 +302,12 @@ export class Organizations {
   /**
    * No description
    *
-   * @name PutOrganizationsIdMembers
+   * @name UpdateMembers
    * @summary Update an Organization's Members
    * @request PUT:/organizations/{id}/members
    * @secure
    */
-  public async putOrganizationsIdMembers(
+  public async updateMembers(
     id: TrelloID,
     query: {
       /**
@@ -340,12 +340,12 @@ export class Organizations {
   /**
    * List the memberships of a Workspace
    *
-   * @name GetOrganizationsIdMemberships
+   * @name GetMemberships
    * @summary Get Memberships of an Organization
    * @request GET:/organizations/{id}/memberships
    * @secure
    */
-  public async getOrganizationsIdMemberships(
+  public async getMemberships(
     id: TrelloID,
     query?: {
       /**
@@ -360,8 +360,8 @@ export class Organizations {
       member?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<Memberships[]> {
-    return this.client.request<Memberships[]>({
+  ): Promise<IMemberships[]> {
+    return this.client.request<IMemberships[]>({
       path: `/organizations/${id}/memberships`,
       method: 'GET',
       query: query,
@@ -373,12 +373,12 @@ export class Organizations {
   /**
    * Get a single Membership for an Organization
    *
-   * @name GetOrganizationsIdMembershipsIdmembership
+   * @name GetMembershipsIdMembership
    * @summary Get a Membership of an Organization
    * @request GET:/organizations/{id}/memberships/{idMembership}
    * @secure
    */
-  public async getOrganizationsIdMembershipsIdmembership(
+  public async getMembershipsIdMembership(
     id: TrelloID,
     idMembership: TrelloID,
     query?: {
@@ -389,8 +389,8 @@ export class Organizations {
       member?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<Memberships> {
-    return this.client.request<Memberships>({
+  ): Promise<IMemberships> {
+    return this.client.request<IMemberships>({
       path: `/organizations/${id}/memberships/${idMembership}`,
       method: 'GET',
       query: query,
@@ -402,16 +402,16 @@ export class Organizations {
   /**
    * Get organization scoped pluginData on this Workspace
    *
-   * @name GetOrganizationsIdPlugindata
+   * @name GetPluginData
    * @summary Get the pluginData Scoped to Organization
    * @request GET:/organizations/{id}/pluginData
    * @secure
    */
-  public async getOrganizationsIdPlugindata(
+  public async getPluginData(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<PluginData[]> {
-    return this.client.request<PluginData[]>({
+  ): Promise<IPluginData[]> {
+    return this.client.request<IPluginData[]>({
       path: `/organizations/${id}/pluginData`,
       method: 'GET',
       secure: true,
@@ -422,16 +422,16 @@ export class Organizations {
   /**
    * List the organization's collections
    *
-   * @name GetOrganizationsIdTags
+   * @name GetTags
    * @summary Get Tags of an Organization
    * @request GET:/organizations/{id}/tags
    * @secure
    */
-  public async getOrganizationsIdTags(
+  public async getTags(
     id: string | TrelloID,
     params: IRequestParams = {}
-  ): Promise<Tag[]> {
-    return this.client.request<Tag[]>({
+  ): Promise<ITag[]> {
+    return this.client.request<ITag[]>({
       path: `/organizations/${id}/tags`,
       method: 'GET',
       secure: true,
@@ -442,16 +442,16 @@ export class Organizations {
   /**
    * Create a Tag in an Organization
    *
-   * @name PostOrganizationsIdTags
+   * @name CreateTags
    * @summary Create a Tag in Organization
    * @request POST:/organizations/{id}/tags
    * @secure
    */
-  public async postOrganizationsIdTags(
+  public async createTags(
     id: string | TrelloID,
     params: IRequestParams = {}
-  ): Promise<Tag> {
-    return this.client.request<Tag>({
+  ): Promise<ITag> {
+    return this.client.request<ITag>({
       path: `/organizations/${id}/tags`,
       method: 'POST',
       secure: true,
@@ -462,12 +462,12 @@ export class Organizations {
   /**
    * Add a member to a Workspace or update their member type.
    *
-   * @name PutOrganizationsIdMembersIdmember
+   * @name UpdateMembersIdMember
    * @summary Update a Member of an Organization
    * @request PUT:/organizations/{id}/members/{idMember}
    * @secure
    */
-  public async putOrganizationsIdMembersIdmember(
+  public async updateMembersIdMember(
     id: TrelloID,
     idMember: string | TrelloID,
     query: {
@@ -475,8 +475,8 @@ export class Organizations {
       type: 'admin' | 'normal'
     },
     params: IRequestParams = {}
-  ): Promise<Member> {
-    return this.client.request<Member>({
+  ): Promise<IMember> {
+    return this.client.request<IMember>({
       path: `/organizations/${id}/members/${idMember}`,
       method: 'PUT',
       query: query,
@@ -488,12 +488,12 @@ export class Organizations {
   /**
    * Remove a member from a Workspace
    *
-   * @name DeleteOrganizationsIdMembers
+   * @name DeleteMembersIdMember
    * @summary Remove a Member from an Organization
    * @request DELETE:/organizations/{id}/members/{idMember}
    * @secure
    */
-  public async deleteOrganizationsIdMembers(
+  public async deleteMembersIdMember(
     id: TrelloID | string,
     idMember: TrelloID,
     params: IRequestParams = {}
@@ -509,12 +509,12 @@ export class Organizations {
   /**
    * Deactivate or reactivate a member of a Workspace
    *
-   * @name PutOrganizationsIdMembersIdmemberDeactivated
+   * @name UpdateMembersDeactivatedIdMember
    * @summary Deactivate or reactivate a member of an Organization
    * @request PUT:/organizations/{id}/members/{idMember}/deactivated
    * @secure
    */
-  public async putOrganizationsIdMembersIdmemberDeactivated(
+  public async updateMembersDeactivatedIdMember(
     id: TrelloID,
     idMember: TrelloID | string,
     query: {
@@ -534,12 +534,12 @@ export class Organizations {
   /**
    * Set the logo image for a Workspace
    *
-   * @name PostOrganizationsIdLogo
+   * @name CreateLogo
    * @summary Update logo for an Organization
    * @request POST:/organizations/{id}/logo
    * @secure
    */
-  public async postOrganizationsIdLogo(
+  public async createLogo(
     id: TrelloID,
     query?: {
       /**
@@ -549,8 +549,8 @@ export class Organizations {
       file?: File
     },
     params: IRequestParams = {}
-  ): Promise<Organization> {
-    return this.client.request<Organization>({
+  ): Promise<IOrganization> {
+    return this.client.request<IOrganization>({
       path: `/organizations/${id}/logo`,
       method: 'POST',
       query: query,
@@ -562,12 +562,12 @@ export class Organizations {
   /**
    * Delete a the logo from a Workspace
    *
-   * @name DeleteOrganizationsIdLogo
+   * @name DeleteLogo
    * @summary Delete Logo for Organization
    * @request DELETE:/organizations/{id}/logo
    * @secure
    */
-  public async deleteOrganizationsIdLogo(
+  public async deleteLogo(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -582,12 +582,12 @@ export class Organizations {
   /**
    * Remove a member from a Workspace and from all Workspace boards
    *
-   * @name OrganizationsIdMembersIdmemberAll
+   * @name DeleteMembersAllIdMember
    * @summary Remove a Member from an Organization and all Organization Boards
    * @request DELETE:/organizations/{id}/members/{idMember}/all
    * @secure
    */
-  public async organizationsIdMembersIdmemberAll(
+  public async deleteMembersAllIdMember(
     id: TrelloID,
     idMember: TrelloID,
     params: IRequestParams = {}
@@ -603,12 +603,12 @@ export class Organizations {
   /**
    * Remove the associated Google Apps domain from a Workspace
    *
-   * @name DeleteOrganizationsIdPrefsAssociateddomain
+   * @name DeletePrefsAssociatedDomain
    * @summary Remove the associated Google Apps domain from a Workspace
    * @request DELETE:/organizations/{id}/prefs/associatedDomain
    * @secure
    */
-  public async deleteOrganizationsIdPrefsAssociateddomain(
+  public async deletePrefsAssociatedDomain(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -623,12 +623,12 @@ export class Organizations {
   /**
    * Remove the email domain restriction on who can be invited to the Workspace
    *
-   * @name DeleteOrganizationsIdPrefsOrginviterestrict
+   * @name DeletePrefsOrgInviteRestrict
    * @summary Delete the email domain restriction on who can be invited to the Workspace
    * @request DELETE:/organizations/{id}/prefs/orgInviteRestrict
    * @secure
    */
-  public async deleteOrganizationsIdPrefsOrginviterestrict(
+  public async deletePrefsOrgInviteRestrict(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -643,12 +643,12 @@ export class Organizations {
   /**
    * Delete an organization's tag
    *
-   * @name DeleteOrganizationsIdTagsIdtag
+   * @name DeleteTagsIdTag
    * @summary Delete an Organization's Tag
    * @request DELETE:/organizations/{id}/tags/{idTag}
    * @secure
    */
-  public async deleteOrganizationsIdTagsIdtag(
+  public async deleteTagsIdTag(
     id: string,
     idTag: string,
     params: IRequestParams = {}
@@ -664,12 +664,12 @@ export class Organizations {
   /**
    * Used to check whether the given board has new billable guests on it.
    *
-   * @name GetOrganizationsIdNewbillableguestsIdboard
+   * @name GetNewBillableGuestsIdBoard
    * @summary Get Organizations new billable guests
    * @request GET:/organizations/{id}/newBillableGuests/{idBoard}
    * @secure
    */
-  public async getOrganizationsIdNewbillableguestsIdboard(
+  public async getNewBillableGuestsIdBoard(
     id: TrelloID,
     idBoard: TrelloID,
     params: IRequestParams = {}

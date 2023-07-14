@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { Plugin, PluginListing, TrelloID } from './data-contracts'
+import { IPlugin, IPluginListing, TrelloID } from './data-contracts'
 import { ContentType, HttpClient, IRequestParams } from './http-client'
 
 export class Plugins {
@@ -22,16 +22,16 @@ export class Plugins {
   /**
    * Get plugins
    *
-   * @name GetPluginsId
+   * @name Get
    * @summary Get a Plugin
    * @request GET:/plugins/{id}/
    * @secure
    */
-  public async getPluginsId(
+  public async get(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<Plugin> {
-    return this.client.request<Plugin>({
+  ): Promise<IPlugin> {
+    return this.client.request<IPlugin>({
       path: `/plugins/${id}/`,
       method: 'GET',
       secure: true,
@@ -42,16 +42,16 @@ export class Plugins {
   /**
    * Update a Plugin
    *
-   * @name PutPluginsId
+   * @name Update
    * @summary Update a Plugin
    * @request PUT:/plugins/{id}/
    * @secure
    */
-  public async putPluginsId(
+  public async update(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<Plugin> {
-    return this.client.request<Plugin>({
+  ): Promise<IPlugin> {
+    return this.client.request<IPlugin>({
       path: `/plugins/${id}/`,
       method: 'PUT',
       secure: true,
@@ -62,12 +62,12 @@ export class Plugins {
   /**
    * Create a new listing for a given locale for your Power-Up
    *
-   * @name PostPluginsIdpluginListing
+   * @name CreateListing
    * @summary Create a Listing for Plugin
    * @request POST:/plugins/{idPlugin}/listing
    * @secure
    */
-  public async postPluginsIdpluginListing(
+  public async createListing(
     idPlugin: TrelloID,
     data: {
       /** The description to show for the given locale */
@@ -80,8 +80,8 @@ export class Plugins {
       name?: string
     },
     params: IRequestParams = {}
-  ): Promise<PluginListing> {
-    return this.client.request<PluginListing>({
+  ): Promise<IPluginListing> {
+    return this.client.request<IPluginListing>({
       path: `/plugins/${idPlugin}/listing`,
       method: 'POST',
       body: data,
@@ -94,12 +94,12 @@ export class Plugins {
   /**
    * No description
    *
-   * @name GetPluginsIdComplianceMemberprivacy
+   * @name GetComplianceMemberPrivacy
    * @summary Get Plugin's Member privacy compliance
    * @request GET:/plugins/{id}/compliance/memberPrivacy
    * @secure
    */
-  public async getPluginsIdComplianceMemberprivacy(
+  public async getComplianceMemberPrivacy(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -114,12 +114,12 @@ export class Plugins {
   /**
    * Update an existing listing for your Power-Up
    *
-   * @name PutPluginsIdpluginListingsIdlisting
+   * @name UpdateListingsIdPluginIdListing
    * @summary Updating Plugin's Listing
    * @request PUT:/plugins/{idPlugin}/listings/{idListing}
    * @secure
    */
-  public async putPluginsIdpluginListingsIdlisting(
+  public async updateListingsIdPluginIdListing(
     idPlugin: TrelloID,
     idListing: TrelloID,
     data: {
@@ -133,8 +133,8 @@ export class Plugins {
       name?: string
     },
     params: IRequestParams = {}
-  ): Promise<PluginListing> {
-    return this.client.request<PluginListing>({
+  ): Promise<IPluginListing> {
+    return this.client.request<IPluginListing>({
       path: `/plugins/${idPlugin}/listings/${idListing}`,
       method: 'PUT',
       body: data,

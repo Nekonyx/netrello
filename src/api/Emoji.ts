@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { Emoji } from './data-contracts'
+import { IEmoji } from './data-contracts'
 import { HttpClient, IRequestParams } from './http-client'
 
 export class Emoji {
@@ -22,11 +22,11 @@ export class Emoji {
   /**
    * List available Emoji
    *
-   * @name Emoji
+   * @name Get
    * @summary List available Emoji
    * @request GET:/emoji
    */
-  public async emoji(
+  public async get(
     query?: {
       /** The locale to return emoji descriptions and names in. Defaults to the logged in member's locale. */
       locale?: string
@@ -37,8 +37,8 @@ export class Emoji {
       spritesheets?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<Emoji> {
-    return this.client.request<Emoji>({
+  ): Promise<IEmoji> {
+    return this.client.request<IEmoji>({
       path: `/emoji`,
       method: 'GET',
       query: query,

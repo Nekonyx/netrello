@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { PosStringOrNumber, TrelloID } from './data-contracts'
+import { IPosStringOrNumber, TrelloID } from './data-contracts'
 import { HttpClient, IRequestParams } from './http-client'
 
 export class Checklists {
@@ -22,12 +22,12 @@ export class Checklists {
   /**
    * No description
    *
-   * @name PostChecklists
+   * @name Create
    * @summary Create a Checklist
    * @request POST:/checklists
    * @secure
    */
-  public async postChecklists(
+  public async create(
     query: {
       /** The ID of the Card that the checklist should be added to. */
       idCard: TrelloID
@@ -38,7 +38,7 @@ export class Checklists {
        */
       name?: string
       /** The position of the checklist on the card. One of: `top`, `bottom`, or a positive number. */
-      pos?: PosStringOrNumber
+      pos?: IPosStringOrNumber
       /** The ID of a checklist to copy into the new checklist. */
       idChecklistSource?: TrelloID
     },
@@ -56,12 +56,12 @@ export class Checklists {
   /**
    * No description
    *
-   * @name GetChecklistsId
+   * @name Get
    * @summary Get a Checklist
    * @request GET:/checklists/{id}
    * @secure
    */
-  public async getChecklistsId(
+  public async get(
     id: TrelloID,
     query?: {
       /**
@@ -108,18 +108,18 @@ export class Checklists {
   /**
    * Update an existing checklist.
    *
-   * @name PutCheclistsId
+   * @name Update
    * @summary Update a Checklist
    * @request PUT:/checklists/{id}
    * @secure
    */
-  public async putCheclistsId(
+  public async update(
     id: TrelloID,
     query?: {
       /** Name of the new checklist being created. Should be length of 1 to 16384. */
       name?: string
       /** Determines the position of the checklist on the card. One of: `top`, `bottom`, or a positive number. */
-      pos?: PosStringOrNumber
+      pos?: IPosStringOrNumber
     },
     params: IRequestParams = {}
   ): Promise<void> {
@@ -135,12 +135,12 @@ export class Checklists {
   /**
    * Delete a checklist
    *
-   * @name DeleteChecklistsId
+   * @name Delete
    * @summary Delete a Checklist
    * @request DELETE:/checklists/{id}
    * @secure
    */
-  public async deleteChecklistsId(
+  public async delete(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -155,12 +155,12 @@ export class Checklists {
   /**
    * No description
    *
-   * @name GetChecklistsIdField
+   * @name GetField
    * @summary Get field on a Checklist
    * @request GET:/checklists/{id}/{field}
    * @secure
    */
-  public async getChecklistsIdField(
+  public async getField(
     id: TrelloID,
     field: 'name' | 'pos',
     params: IRequestParams = {}
@@ -176,17 +176,17 @@ export class Checklists {
   /**
    * No description
    *
-   * @name PutChecklistsIdField
+   * @name UpdateField
    * @summary Update field on a Checklist
    * @request PUT:/checklists/{id}/{field}
    * @secure
    */
-  public async putChecklistsIdField(
+  public async updateField(
     id: TrelloID,
     field: 'name' | 'pos',
     query: {
       /** The value to change the checklist name to. Should be a string of length 1 to 16384. */
-      value: PosStringOrNumber | TrelloID
+      value: IPosStringOrNumber | TrelloID
     },
     params: IRequestParams = {}
   ): Promise<void> {
@@ -202,12 +202,12 @@ export class Checklists {
   /**
    * No description
    *
-   * @name GetChecklistsIdBoard
+   * @name GetBoard
    * @summary Get the Board the Checklist is on
    * @request GET:/checklists/{id}/board
    * @secure
    */
-  public async getChecklistsIdBoard(
+  public async getBoard(
     id: TrelloID,
     query?: {
       /**
@@ -230,12 +230,12 @@ export class Checklists {
   /**
    * No description
    *
-   * @name GetChecklistsIdCards
+   * @name GetCards
    * @summary Get the Card a Checklist is on
    * @request GET:/checklists/{id}/cards
    * @secure
    */
-  public async getChecklistsIdCards(
+  public async getCards(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -250,12 +250,12 @@ export class Checklists {
   /**
    * No description
    *
-   * @name GetChecklistsIdCheckitems
+   * @name GetCheckItems
    * @summary Get Checkitems on a Checklist
    * @request GET:/checklists/{id}/checkItems
    * @secure
    */
-  public async getChecklistsIdCheckitems(
+  public async getCheckItems(
     id: TrelloID,
     query?: {
       /**
@@ -292,12 +292,12 @@ export class Checklists {
   /**
    * No description
    *
-   * @name PostChecklistsIdCheckitems
+   * @name CreateCheckItems
    * @summary Create Checkitem on Checklist
    * @request POST:/checklists/{id}/checkItems
    * @secure
    */
-  public async postChecklistsIdCheckitems(
+  public async createCheckItems(
     id: TrelloID,
     query: {
       /**
@@ -310,7 +310,7 @@ export class Checklists {
        * The position of the check item in the checklist. One of: `top`, `bottom`, or a positive number.
        * @default "bottom"
        */
-      pos?: PosStringOrNumber
+      pos?: IPosStringOrNumber
       /**
        * Determines whether the check item is already checked when created.
        * @default false
@@ -340,12 +340,12 @@ export class Checklists {
   /**
    * No description
    *
-   * @name GetChecklistsIdCheckitemsIdcheckitem
+   * @name GetCheckItemsIdCheckItem
    * @summary Get a Checkitem on a Checklist
    * @request GET:/checklists/{id}/checkItems/{idCheckItem}
    * @secure
    */
-  public async getChecklistsIdCheckitemsIdcheckitem(
+  public async getCheckItemsIdCheckItem(
     id: TrelloID,
     idCheckItem: TrelloID,
     query?: {
@@ -378,12 +378,12 @@ export class Checklists {
   /**
    * Remove an item from a checklist
    *
-   * @name DeleteChecklistsIdCheckitemsIdcheckitem
+   * @name DeleteCheckItemsIdCheckItem
    * @summary Delete Checkitem from Checklist
    * @request DELETE:/checklists/{id}/checkItems/{idCheckItem}
    * @secure
    */
-  public async deleteChecklistsIdCheckitemsIdcheckitem(
+  public async deleteCheckItemsIdCheckItem(
     id: TrelloID,
     idCheckItem: TrelloID,
     params: IRequestParams = {}

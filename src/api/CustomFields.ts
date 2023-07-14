@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { CustomField, PosStringOrNumber, TrelloID } from './data-contracts'
+import { ICustomField, IPosStringOrNumber, TrelloID } from './data-contracts'
 import { ContentType, HttpClient, IRequestParams } from './http-client'
 
 export class CustomFields {
@@ -22,12 +22,12 @@ export class CustomFields {
   /**
    * Create a new Custom Field on a board.
    *
-   * @name PostCustomfields
+   * @name Create
    * @summary Create a new Custom Field on a Board
    * @request POST:/customFields
    * @secure
    */
-  public async postCustomfields(
+  public async create(
     data: {
       /** The ID of the model for which the Custom Field is being defined. This should always be the ID of a board. */
       idModel: TrelloID
@@ -39,7 +39,7 @@ export class CustomFields {
       type: 'checkbox' | 'list' | 'number' | 'text' | 'date'
       /** If the type is `checkbox`  */
       options?: string
-      pos: PosStringOrNumber
+      pos: IPosStringOrNumber
       /**
        * Whether this Custom Field should be shown on the front of Cards
        * @default true
@@ -47,8 +47,8 @@ export class CustomFields {
       display_cardFront?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<CustomField> {
-    return this.client.request<CustomField>({
+  ): Promise<ICustomField> {
+    return this.client.request<ICustomField>({
       path: `/customFields`,
       method: 'POST',
       body: data,
@@ -61,16 +61,16 @@ export class CustomFields {
   /**
    * No description
    *
-   * @name GetCustomfieldsId
+   * @name Get
    * @summary Get a Custom Field
    * @request GET:/customFields/{id}
    * @secure
    */
-  public async getCustomfieldsId(
+  public async get(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<CustomField> {
-    return this.client.request<CustomField>({
+  ): Promise<ICustomField> {
+    return this.client.request<ICustomField>({
       path: `/customFields/${id}`,
       method: 'GET',
       secure: true,
@@ -81,23 +81,23 @@ export class CustomFields {
   /**
    * Update a Custom Field definition.
    *
-   * @name PutCustomfieldsId
+   * @name Update
    * @summary Update a Custom Field definition
    * @request PUT:/customFields/{id}
    * @secure
    */
-  public async putCustomfieldsId(
+  public async update(
     id: TrelloID,
     data: {
       /** The name of the Custom Field */
       name?: string
-      pos?: PosStringOrNumber
+      pos?: IPosStringOrNumber
       /** Whether to display this custom field on the front of cards */
       'display/cardFront'?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<CustomField> {
-    return this.client.request<CustomField>({
+  ): Promise<ICustomField> {
+    return this.client.request<ICustomField>({
       path: `/customFields/${id}`,
       method: 'PUT',
       body: data,
@@ -110,12 +110,12 @@ export class CustomFields {
   /**
    * Delete a Custom Field from a board.
    *
-   * @name DeleteCustomfieldsId
+   * @name Delete
    * @summary Delete a Custom Field definition
    * @request DELETE:/customFields/{id}
    * @secure
    */
-  public async deleteCustomfieldsId(
+  public async delete(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -130,12 +130,12 @@ export class CustomFields {
   /**
    * Add an option to a dropdown Custom Field
    *
-   * @name GetCustomfieldsIdOptions
+   * @name CreateOptions
    * @summary Add Option to Custom Field dropdown
    * @request POST:/customFields/{id}/options
    * @secure
    */
-  public async getCustomfieldsIdOptions(
+  public async createOptions(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -150,12 +150,12 @@ export class CustomFields {
   /**
    * Get the options of a drop down Custom Field
    *
-   * @name PostCustomfieldsIdOptions
+   * @name GetOptions
    * @summary Get Options of Custom Field drop down
    * @request GET:/customFields/{id}/options
    * @secure
    */
-  public async postCustomfieldsIdOptions(
+  public async getOptions(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -170,12 +170,12 @@ export class CustomFields {
   /**
    * Retrieve a specific, existing Option on a given dropdown-type Custom Field
    *
-   * @name GetCustomfieldsOptionsIdcustomfieldoption
+   * @name GetOptionsIdCustomFieldOption
    * @summary Get Option of Custom Field dropdown
    * @request GET:/customFields/{id}/options/{idCustomFieldOption}
    * @secure
    */
-  public async getCustomfieldsOptionsIdcustomfieldoption(
+  public async getOptionsIdCustomFieldOption(
     id: TrelloID,
     idCustomFieldOption: TrelloID,
     params: IRequestParams = {}
@@ -191,12 +191,12 @@ export class CustomFields {
   /**
    * Delete an option from a Custom Field dropdown.
    *
-   * @name DeleteCustomfieldsOptionsIdcustomfieldoption
+   * @name DeleteOptionsIdCustomFieldOption
    * @summary Delete Option of Custom Field dropdown
    * @request DELETE:/customFields/{id}/options/{idCustomFieldOption}
    * @secure
    */
-  public async deleteCustomfieldsOptionsIdcustomfieldoption(
+  public async deleteOptionsIdCustomFieldOption(
     id: TrelloID,
     idCustomFieldOption: TrelloID,
     params: IRequestParams = {}

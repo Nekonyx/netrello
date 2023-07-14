@@ -22,12 +22,12 @@ export class Labels {
   /**
    * Get information about a single Label.
    *
-   * @name GetLabelsId
+   * @name Get
    * @summary Get a Label
    * @request GET:/labels/{id}
    * @secure
    */
-  public async getLabelsId(
+  public async get(
     id: TrelloID,
     query?: {
       /**
@@ -50,12 +50,12 @@ export class Labels {
   /**
    * Update a label by ID.
    *
-   * @name PutLabelsId
+   * @name Update
    * @summary Update a Label
    * @request PUT:/labels/{id}
    * @secure
    */
-  public async putLabelsId(
+  public async update(
     id: TrelloID,
     query?: {
       /** The new name for the label */
@@ -77,12 +77,12 @@ export class Labels {
   /**
    * Delete a label by ID.
    *
-   * @name DeleteLabelsId
+   * @name Delete
    * @summary Delete a Label
    * @request DELETE:/labels/{id}
    * @secure
    */
-  public async deleteLabelsId(
+  public async delete(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -97,12 +97,12 @@ export class Labels {
   /**
    * Update a field on a label.
    *
-   * @name PutLabelsIdField
+   * @name UpdateField
    * @summary Update a field on a label
    * @request PUT:/labels/{id}/{field}
    * @secure
    */
-  public async putLabelsIdField(
+  public async updateField(
     id: string,
     field: 'color' | 'name',
     query: {
@@ -123,12 +123,12 @@ export class Labels {
   /**
    * Create a new Label on a Board.
    *
-   * @name PostLabels
+   * @name Create
    * @summary Create a Label
    * @request POST:/labels
    * @secure
    */
-  public async postLabels(
+  public async create(
     query: {
       /** Name for the label */
       name: string

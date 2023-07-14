@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { Card, TrelloID } from './data-contracts'
+import { ICard, TrelloID } from './data-contracts'
 import { HttpClient, IRequestParams } from './http-client'
 
 export class Lists {
@@ -22,12 +22,12 @@ export class Lists {
   /**
    * Get information about a List
    *
-   * @name GetListsId
+   * @name Get
    * @summary Get a List
    * @request GET:/lists/{id}
    * @secure
    */
-  public async getListsId(
+  public async get(
     id: string,
     query?: {
       /**
@@ -50,12 +50,12 @@ export class Lists {
   /**
    * Update the properties of a List
    *
-   * @name PutListsId
+   * @name Update
    * @summary Update a List
    * @request PUT:/lists/{id}
    * @secure
    */
-  public async putListsId(
+  public async update(
     id: string,
     query?: {
       /** New name for the list */
@@ -83,12 +83,12 @@ export class Lists {
   /**
    * Create a new List on a Board
    *
-   * @name PostLists
+   * @name Create
    * @summary Create a new List
    * @request POST:/lists
    * @secure
    */
-  public async postLists(
+  public async create(
     query: {
       /** Name for the list */
       name: string
@@ -113,12 +113,12 @@ export class Lists {
   /**
    * Archive all cards in a list
    *
-   * @name PostListsIdArchiveallcards
+   * @name CreateArchiveAllCards
    * @summary Archive all Cards in List
    * @request POST:/lists/{id}/archiveAllCards
    * @secure
    */
-  public async postListsIdArchiveallcards(
+  public async createArchiveAllCards(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -133,12 +133,12 @@ export class Lists {
   /**
    * Move all Cards in a List
    *
-   * @name PostListsIdMoveallcards
+   * @name CreateMoveAllCards
    * @summary Move all Cards in List
    * @request POST:/lists/{id}/moveAllCards
    * @secure
    */
-  public async postListsIdMoveallcards(
+  public async createMoveAllCards(
     id: TrelloID,
     query: {
       /** The ID of the board the cards should be moved to */
@@ -160,12 +160,12 @@ export class Lists {
   /**
    * Archive or unarchive a list
    *
-   * @name PutListsIdClosed
+   * @name UpdateClosed
    * @summary Archive or unarchive a list
    * @request PUT:/lists/{id}/closed
    * @secure
    */
-  public async putListsIdClosed(
+  public async updateClosed(
     id: TrelloID,
     query?: {
       /** Set to true to close (archive) the list */
@@ -185,12 +185,12 @@ export class Lists {
   /**
    * Move a List to a different Board
    *
-   * @name PutIdIdboard
+   * @name UpdateIdBoard
    * @summary Move List to Board
    * @request PUT:/lists/{id}/idBoard
    * @secure
    */
-  public async putIdIdboard(
+  public async updateIdBoard(
     id: TrelloID,
     query: {
       /** The ID of the board to move the list to */
@@ -210,12 +210,12 @@ export class Lists {
   /**
    * Rename a list
    *
-   * @name PutListsIdField
+   * @name UpdateField
    * @summary Update a field on a List
    * @request PUT:/lists/{id}/{field}
    * @secure
    */
-  public async putListsIdField(
+  public async updateField(
     id: TrelloID,
     field: 'name' | 'pos' | 'subscribed',
     query?: {
@@ -236,12 +236,12 @@ export class Lists {
   /**
    * Get the Actions on a List
    *
-   * @name GetListsIdActions
+   * @name GetActions
    * @summary Get Actions for a List
    * @request GET:/lists/{id}/actions
    * @secure
    */
-  public async getListsIdActions(
+  public async getActions(
     id: string,
     query?: {
       /** A comma-separated list of [action types](https://developer.atlassian.com/cloud/trello/guides/rest-api/action-types/). */
@@ -261,12 +261,12 @@ export class Lists {
   /**
    * Get the board a list is on
    *
-   * @name GetListsIdBoard
+   * @name GetBoard
    * @summary Get the Board a List is on
    * @request GET:/lists/{id}/board
    * @secure
    */
-  public async getListsIdBoard(
+  public async getBoard(
     id: string,
     query?: {
       /**
@@ -289,16 +289,16 @@ export class Lists {
   /**
    * List the cards in a list
    *
-   * @name GetListsIdCards
+   * @name GetCards
    * @summary Get Cards in a List
    * @request GET:/lists/{id}/cards
    * @secure
    */
-  public async getListsIdCards(
+  public async getCards(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<Card[]> {
-    return this.client.request<Card[]>({
+  ): Promise<ICard[]> {
+    return this.client.request<ICard[]>({
       path: `/lists/${id}/cards`,
       method: 'GET',
       secure: true,

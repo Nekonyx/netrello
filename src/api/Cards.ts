@@ -10,14 +10,14 @@
  */
 
 import {
-  Action,
-  Attachment,
   AttachmentFields,
-  Card,
   CardFields,
-  CheckItem,
-  CustomFieldItems,
-  PosStringOrNumber,
+  IAction,
+  IAttachment,
+  ICard,
+  ICheckItem,
+  ICustomFieldItems,
+  IPosStringOrNumber,
   TrelloID
 } from './data-contracts'
 import { ContentType, HttpClient, IRequestParams } from './http-client'
@@ -32,12 +32,12 @@ export class Cards {
   /**
    * Create a new card
    *
-   * @name PostCards
+   * @name Create
    * @summary Create a new Card
    * @request POST:/cards
    * @secure
    */
-  public async postCards(
+  public async create(
     query: {
       /** The name for the card */
       name?: string
@@ -96,8 +96,8 @@ export class Cards {
       coordinates?: string
     },
     params: IRequestParams = {}
-  ): Promise<Card> {
-    return this.client.request<Card>({
+  ): Promise<ICard> {
+    return this.client.request<ICard>({
       path: `/cards`,
       method: 'POST',
       query: query,
@@ -109,12 +109,12 @@ export class Cards {
   /**
    * Get a card by its ID
    *
-   * @name GetCardsId
+   * @name Get
    * @summary Get a Card
    * @request GET:/cards/{id}
    * @secure
    */
-  public async getCardsId(
+  public async get(
     id: TrelloID,
     query?: {
       /** `all` or a comma-separated list of [fields](/cloud/trello/guides/rest-api/object-definitions/). **Defaults**: `badges, checkItemStates, closed, dateLastActivity, desc, descData, due, start, email, idBoard, idChecklists, idLabels, idList, idMembers, idShort, idAttachmentCover, manualCoverAttachment, labels, name, pos, shortUrl, url` */
@@ -191,8 +191,8 @@ export class Cards {
       customFieldItems?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<Card> {
-    return this.client.request<Card>({
+  ): Promise<ICard> {
+    return this.client.request<ICard>({
       path: `/cards/${id}`,
       method: 'GET',
       query: query,
@@ -204,12 +204,12 @@ export class Cards {
   /**
    * Update a card
    *
-   * @name PutCardsId
+   * @name Update
    * @summary Update a Card
    * @request PUT:/cards/{id}
    * @secure
    */
-  public async putCardsId(
+  public async update(
     id: TrelloID,
     query?: {
       /** The new name for the card */
@@ -300,8 +300,8 @@ export class Cards {
       }
     },
     params: IRequestParams = {}
-  ): Promise<Card> {
-    return this.client.request<Card>({
+  ): Promise<ICard> {
+    return this.client.request<ICard>({
       path: `/cards/${id}`,
       method: 'PUT',
       query: query,
@@ -313,12 +313,12 @@ export class Cards {
   /**
    * Delete a Card
    *
-   * @name DeleteCardsId
+   * @name Delete
    * @summary Delete a Card
    * @request DELETE:/cards/{id}
    * @secure
    */
-  public async deleteCardsId(
+  public async delete(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -333,17 +333,17 @@ export class Cards {
   /**
    * Get a specific property of a card
    *
-   * @name GetCardsIdField
+   * @name GetField
    * @summary Get a field on a Card
    * @request GET:/cards/{id}/{field}
    * @secure
    */
-  public async getCardsIdField(
+  public async getField(
     id: TrelloID,
     field: CardFields,
     params: IRequestParams = {}
-  ): Promise<Card> {
-    return this.client.request<Card>({
+  ): Promise<ICard> {
+    return this.client.request<ICard>({
       path: `/cards/${id}/${field}`,
       method: 'GET',
       secure: true,
@@ -354,12 +354,12 @@ export class Cards {
   /**
    * List the Actions on a Card
    *
-   * @name GetCardsIdActions
+   * @name GetActions
    * @summary Get Actions on a Card
    * @request GET:/cards/{id}/actions
    * @secure
    */
-  public async getCardsIdActions(
+  public async getActions(
     id: TrelloID,
     query?: {
       /**
@@ -375,8 +375,8 @@ export class Cards {
       page?: number
     },
     params: IRequestParams = {}
-  ): Promise<Action[]> {
-    return this.client.request<Action[]>({
+  ): Promise<IAction[]> {
+    return this.client.request<IAction[]>({
       path: `/cards/${id}/actions`,
       method: 'GET',
       query: query,
@@ -388,12 +388,12 @@ export class Cards {
   /**
    * List the attachments on a card
    *
-   * @name GetCardsIdAttachments
+   * @name GetAttachments
    * @summary Get Attachments on a Card
    * @request GET:/cards/{id}/attachments
    * @secure
    */
-  public async getCardsIdAttachments(
+  public async getAttachments(
     id: TrelloID,
     query?: {
       /**
@@ -408,8 +408,8 @@ export class Cards {
       filter?: string
     },
     params: IRequestParams = {}
-  ): Promise<Attachment[]> {
-    return this.client.request<Attachment[]>({
+  ): Promise<IAttachment[]> {
+    return this.client.request<IAttachment[]>({
       path: `/cards/${id}/attachments`,
       method: 'GET',
       query: query,
@@ -421,12 +421,12 @@ export class Cards {
   /**
    * Create an Attachment to a Card
    *
-   * @name PostCardsIdAttachments
+   * @name CreateAttachments
    * @summary Create Attachment On Card
    * @request POST:/cards/{id}/attachments
    * @secure
    */
-  public async postCardsIdAttachments(
+  public async createAttachments(
     id: TrelloID,
     query?: {
       /** The name of the attachment. Max length 256. */
@@ -447,8 +447,8 @@ export class Cards {
       setCover?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<Attachment[]> {
-    return this.client.request<Attachment[]>({
+  ): Promise<IAttachment[]> {
+    return this.client.request<IAttachment[]>({
       path: `/cards/${id}/attachments`,
       method: 'POST',
       query: query,
@@ -460,12 +460,12 @@ export class Cards {
   /**
    * Get a specific Attachment on a Card.
    *
-   * @name GetCardsIdAttachmentsIdattachment
+   * @name GetAttachmentsIdAttachment
    * @summary Get an Attachment on a Card
    * @request GET:/cards/{id}/attachments/{idAttachment}
    * @secure
    */
-  public async getCardsIdAttachmentsIdattachment(
+  public async getAttachmentsIdAttachment(
     id: TrelloID,
     idAttachment: TrelloID,
     query?: {
@@ -476,8 +476,8 @@ export class Cards {
       fields?: AttachmentFields[]
     },
     params: IRequestParams = {}
-  ): Promise<Attachment[]> {
-    return this.client.request<Attachment[]>({
+  ): Promise<IAttachment[]> {
+    return this.client.request<IAttachment[]>({
       path: `/cards/${id}/attachments/${idAttachment}`,
       method: 'GET',
       query: query,
@@ -489,12 +489,12 @@ export class Cards {
   /**
    * Delete an Attachment
    *
-   * @name DeletedCardsIdAttachmentsIdattachment
+   * @name DeleteAttachmentsIdAttachment
    * @summary Delete an Attachment on a Card
    * @request DELETE:/cards/{id}/attachments/{idAttachment}
    * @secure
    */
-  public async deletedCardsIdAttachmentsIdattachment(
+  public async deleteAttachmentsIdAttachment(
     id: TrelloID,
     idAttachment: TrelloID,
     id: TrelloID,
@@ -512,12 +512,12 @@ export class Cards {
   /**
    * Get the board a card is on
    *
-   * @name GetCardsIdBoard
+   * @name GetBoard
    * @summary Get the Board the Card is on
    * @request GET:/cards/{id}/board
    * @secure
    */
-  public async getCardsIdBoard(
+  public async getBoard(
     id: TrelloID,
     query?: {
       /**
@@ -540,12 +540,12 @@ export class Cards {
   /**
    * Get the completed checklist items on a card
    *
-   * @name GetCardsIdCheckitemstates
+   * @name GetCheckItemStates
    * @summary Get checkItems on a Card
    * @request GET:/cards/{id}/checkItemStates
    * @secure
    */
-  public async getCardsIdCheckitemstates(
+  public async getCheckItemStates(
     id: TrelloID,
     query?: {
       /**
@@ -568,12 +568,12 @@ export class Cards {
   /**
    * Get the checklists on a card
    *
-   * @name GetCardsIdChecklists
+   * @name GetChecklists
    * @summary Get Checklists on a Card
    * @request GET:/cards/{id}/checklists
    * @secure
    */
-  public async getCardsIdChecklists(
+  public async getChecklists(
     id: TrelloID,
     query?: {
       /**
@@ -619,12 +619,12 @@ export class Cards {
   /**
    * Create a new checklist on a card
    *
-   * @name PostCardsIdChecklists
+   * @name CreateChecklists
    * @summary Create Checklist on a Card
    * @request POST:/cards/{id}/checklists
    * @secure
    */
-  public async postCardsIdChecklists(
+  public async createChecklists(
     id: TrelloID,
     query?: {
       /** The name of the checklist */
@@ -648,12 +648,12 @@ export class Cards {
   /**
    * Get a specific checkItem on a card
    *
-   * @name GetCardsIdCheckitemIdcheckitem
+   * @name GetCheckItemIdCheckItem
    * @summary Get checkItem on a Card
    * @request GET:/cards/{id}/checkItem/{idCheckItem}
    * @secure
    */
-  public async getCardsIdCheckitemIdcheckitem(
+  public async getCheckItemIdCheckItem(
     id: TrelloID,
     idCheckItem: TrelloID,
     query?: {
@@ -677,12 +677,12 @@ export class Cards {
   /**
    * Update an item in a checklist on a card.
    *
-   * @name PutCardsIdCheckitemIdcheckitem
+   * @name UpdateCheckItemIdCheckItem
    * @summary Update a checkItem on a Card
    * @request PUT:/cards/{id}/checkItem/{idCheckItem}
    * @secure
    */
-  public async putCardsIdCheckitemIdcheckitem(
+  public async updateCheckItemIdCheckItem(
     id: TrelloID,
     idCheckItem: TrelloID,
     query?: {
@@ -693,7 +693,7 @@ export class Cards {
       /** The ID of the checklist this item is in */
       idChecklist?: TrelloID
       /** `top`, `bottom`, or a positive float */
-      pos?: PosStringOrNumber
+      pos?: IPosStringOrNumber
       /**
        * A due date for the checkitem
        * @format date
@@ -718,12 +718,12 @@ export class Cards {
   /**
    * Delete a checklist item
    *
-   * @name DeleteCardsIdCheckitemIdcheckitem
+   * @name DeleteCheckItemIdCheckItem
    * @summary Delete checkItem on a Card
    * @request DELETE:/cards/{id}/checkItem/{idCheckItem}
    * @secure
    */
-  public async deleteCardsIdCheckitemIdcheckitem(
+  public async deleteCheckItemIdCheckItem(
     id: TrelloID,
     idCheckItem: TrelloID,
     params: IRequestParams = {}
@@ -739,12 +739,12 @@ export class Cards {
   /**
    * Get the list a card is in
    *
-   * @name GetCardsIdList
+   * @name GetList
    * @summary Get the List of a Card
    * @request GET:/cards/{id}/list
    * @secure
    */
-  public async getCardsIdList(
+  public async getList(
     id: TrelloID,
     query?: {
       /**
@@ -767,12 +767,12 @@ export class Cards {
   /**
    * Get the members on a card
    *
-   * @name GetCardsIdMembers
+   * @name GetMembers
    * @summary Get the Members of a Card
    * @request GET:/cards/{id}/members
    * @secure
    */
-  public async getCardsIdMembers(
+  public async getMembers(
     id: TrelloID,
     query?: {
       /**
@@ -795,12 +795,12 @@ export class Cards {
   /**
    * Get the members who have voted on a card
    *
-   * @name GetCardsIdMembersvoted
+   * @name GetMembersVoted
    * @summary Get Members who have voted on a Card
    * @request GET:/cards/{id}/membersVoted
    * @secure
    */
-  public async getCardsIdMembersvoted(
+  public async getMembersVoted(
     id: TrelloID,
     query?: {
       /**
@@ -823,12 +823,12 @@ export class Cards {
   /**
    * Vote on the card for a given member.
    *
-   * @name Cardsidmembersvoted1
+   * @name CreateMembersVoted
    * @summary Add Member vote to Card
    * @request POST:/cards/{id}/membersVoted
    * @secure
    */
-  public async cardsidmembersvoted1(
+  public async createMembersVoted(
     id: TrelloID,
     query: {
       /** The ID of the member to vote 'yes' on the card */
@@ -848,12 +848,12 @@ export class Cards {
   /**
    * Get any shared pluginData on a card.
    *
-   * @name GetCardsIdPlugindata
+   * @name GetPluginData
    * @summary Get pluginData on a Card
    * @request GET:/cards/{id}/pluginData
    * @secure
    */
-  public async getCardsIdPlugindata(
+  public async getPluginData(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -868,12 +868,12 @@ export class Cards {
   /**
    * Get the stickers on a card
    *
-   * @name GetCardsIdStickers
+   * @name GetStickers
    * @summary Get Stickers on a Card
    * @request GET:/cards/{id}/stickers
    * @secure
    */
-  public async getCardsIdStickers(
+  public async getStickers(
     id: TrelloID,
     id: TrelloID,
     query?: {
@@ -897,12 +897,12 @@ export class Cards {
   /**
    * Add a sticker to a card
    *
-   * @name PostCardsIdStickers
+   * @name CreateStickers
    * @summary Add a Sticker to a Card
    * @request POST:/cards/{id}/stickers
    * @secure
    */
-  public async postCardsIdStickers(
+  public async createStickers(
     id: TrelloID,
     query: {
       /** For custom stickers, the id of the sticker. For default stickers, the string identifier (like 'taco-cool', see below) */
@@ -946,12 +946,12 @@ export class Cards {
   /**
    * Get a specific sticker on a card
    *
-   * @name GetCardsIdStickersIdsticker
+   * @name GetStickersIdSticker
    * @summary Get a Sticker on a Card
    * @request GET:/cards/{id}/stickers/{idSticker}
    * @secure
    */
-  public async getCardsIdStickersIdsticker(
+  public async getStickersIdSticker(
     id: TrelloID,
     idSticker: TrelloID,
     query?: {
@@ -975,12 +975,12 @@ export class Cards {
   /**
    * Remove a sticker from the card
    *
-   * @name DeleteCardsIdStickersIdsticker
+   * @name DeleteStickersIdSticker
    * @summary Delete a Sticker on a Card
    * @request DELETE:/cards/{id}/stickers/{idSticker}
    * @secure
    */
-  public async deleteCardsIdStickersIdsticker(
+  public async deleteStickersIdSticker(
     id: TrelloID,
     idSticker: TrelloID,
     params: IRequestParams = {}
@@ -996,12 +996,12 @@ export class Cards {
   /**
    * Update a sticker on a card
    *
-   * @name PutCardsIdStickersIdsticker
+   * @name UpdateStickersIdSticker
    * @summary Update a Sticker on a Card
    * @request PUT:/cards/{id}/stickers/{idSticker}
    * @secure
    */
-  public async putCardsIdStickersIdsticker(
+  public async updateStickersIdSticker(
     id: TrelloID,
     idSticker: TrelloID,
     query: {
@@ -1044,12 +1044,12 @@ export class Cards {
   /**
    * Update an existing comment
    *
-   * @name PutCardsIdActionsIdactionComments
+   * @name UpdateActionsCommentsIdAction
    * @summary Update Comment Action on a Card
    * @request PUT:/cards/{id}/actions/{idAction}/comments
    * @secure
    */
-  public async putCardsIdActionsIdactionComments(
+  public async updateActionsCommentsIdAction(
     id: TrelloID,
     idAction: TrelloID,
     query: {
@@ -1070,12 +1070,12 @@ export class Cards {
   /**
    * Delete a comment
    *
-   * @name DeleteCardsIdActionsIdComments
+   * @name DeleteActionsCommentsIdAction
    * @summary Delete a comment on a Card
    * @request DELETE:/cards/{id}/actions/{idAction}/comments
    * @secure
    */
-  public async deleteCardsIdActionsIdComments(
+  public async deleteActionsCommentsIdAction(
     id: TrelloID,
     idAction: TrelloID,
     params: IRequestParams = {}
@@ -1091,12 +1091,12 @@ export class Cards {
   /**
    * Setting, updating, and removing the value for a Custom Field on a card. For more details on updating custom fields check out the [Getting Started With Custom Fields](/cloud/trello/guides/rest-api/getting-started-with-custom-fields/)
    *
-   * @name PutCardsIdcardCustomfieldIdcustomfieldItem
+   * @name UpdateCustomFieldItemIdCardIdCustomField
    * @summary Update Custom Field item on Card
    * @request PUT:/cards/{idCard}/customField/{idCustomField}/item
    * @secure
    */
-  public async putCardsIdcardCustomfieldIdcustomfieldItem(
+  public async updateCustomFieldItemIdCardIdCustomField(
     idCard: TrelloID,
     idCustomField: TrelloID,
     data:
@@ -1132,12 +1132,12 @@ export class Cards {
   /**
    * Setting, updating, and removing the values for multiple Custom Fields on a card. For more details on updating custom fields check out the [Getting Started With Custom Fields](/cloud/trello/guides/rest-api/getting-started-with-custom-fields/)
    *
-   * @name PutCardsIdcardCustomfields
+   * @name UpdateCustomFields
    * @summary Update Multiple Custom Field items on Card
    * @request PUT:/cards/{idCard}/customFields
    * @secure
    */
-  public async putCardsIdcardCustomfields(
+  public async updateCustomFields(
     idCard: string,
     data: {
       /** An array of objects containing the custom field ID, key and value, and ID of list type option. */
@@ -1182,16 +1182,16 @@ export class Cards {
   /**
    * Get the custom field items for a card.
    *
-   * @name GetCardsIdCustomfielditems
+   * @name GetCustomFieldItems
    * @summary Get Custom Field Items for a Card
    * @request GET:/cards/{id}/customFieldItems
    * @secure
    */
-  public async getCardsIdCustomfielditems(
+  public async getCustomFieldItems(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<CustomFieldItems[]> {
-    return this.client.request<CustomFieldItems[]>({
+  ): Promise<ICustomFieldItems[]> {
+    return this.client.request<ICustomFieldItems[]>({
       path: `/cards/${id}/customFieldItems`,
       method: 'GET',
       secure: true,
@@ -1202,20 +1202,20 @@ export class Cards {
   /**
    * Add a new comment to a card
    *
-   * @name PostCardsIdActionsComments
+   * @name CreateActionsComments
    * @summary Add a new comment to a Card
    * @request POST:/cards/{id}/actions/comments
    * @secure
    */
-  public async postCardsIdActionsComments(
+  public async createActionsComments(
     id: TrelloID,
     query: {
       /** The comment */
       text: string
     },
     params: IRequestParams = {}
-  ): Promise<Action> {
-    return this.client.request<Action>({
+  ): Promise<IAction> {
+    return this.client.request<IAction>({
       path: `/cards/${id}/actions/comments`,
       method: 'POST',
       query: query,
@@ -1227,12 +1227,12 @@ export class Cards {
   /**
    * Add a label to a card
    *
-   * @name PostCardsIdIdlabels
+   * @name CreateIdLabels
    * @summary Add a Label to a Card
    * @request POST:/cards/{id}/idLabels
    * @secure
    */
-  public async postCardsIdIdlabels(
+  public async createIdLabels(
     id: TrelloID,
     query?: {
       /** The ID of the label to add */
@@ -1252,12 +1252,12 @@ export class Cards {
   /**
    * Add a member to a card
    *
-   * @name PostCardsIdIdmembers
+   * @name CreateIdMembers
    * @summary Add a Member to a Card
    * @request POST:/cards/{id}/idMembers
    * @secure
    */
-  public async postCardsIdIdmembers(
+  public async createIdMembers(
     id: TrelloID,
     query?: {
       /** The ID of the Member to add to the card */
@@ -1277,12 +1277,12 @@ export class Cards {
   /**
    * Create a new label for the board and add it to the given card.
    *
-   * @name PostCardsIdLabels
+   * @name CreateLabels
    * @summary Create a new Label on a Card
    * @request POST:/cards/{id}/labels
    * @secure
    */
-  public async postCardsIdLabels(
+  public async createLabels(
     id: TrelloID,
     query: {
       /** A valid label color or `null`. See [labels](/cloud/trello/guides/rest-api/object-definitions/) */
@@ -1304,12 +1304,12 @@ export class Cards {
   /**
    * Mark notifications about this card as read
    *
-   * @name PostCardsIdMarkassociatednotificationsread
+   * @name CreateMarkAssociatedNotificationsRead
    * @summary Mark a Card's Notifications as read
    * @request POST:/cards/{id}/markAssociatedNotificationsRead
    * @secure
    */
-  public async postCardsIdMarkassociatednotificationsread(
+  public async createMarkAssociatedNotificationsRead(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -1324,12 +1324,12 @@ export class Cards {
   /**
    * Remove a label from a card
    *
-   * @name DeleteCardsIdIdlabelsIdlabel
+   * @name DeleteIdLabelsIdLabel
    * @summary Remove a Label from a Card
    * @request DELETE:/cards/{id}/idLabels/{idLabel}
    * @secure
    */
-  public async deleteCardsIdIdlabelsIdlabel(
+  public async deleteIdLabelsIdLabel(
     id: TrelloID,
     idLabel: TrelloID,
     params: IRequestParams = {}
@@ -1345,12 +1345,12 @@ export class Cards {
   /**
    * Remove a member from a card
    *
-   * @name DeleteIdIdmembersIdmember
+   * @name DeleteIdMembersIdMember
    * @summary Remove a Member from a Card
    * @request DELETE:/cards/{id}/idMembers/{idMember}
    * @secure
    */
-  public async deleteIdIdmembersIdmember(
+  public async deleteIdMembersIdMember(
     id: TrelloID,
     idMember: TrelloID,
     params: IRequestParams = {}
@@ -1366,12 +1366,12 @@ export class Cards {
   /**
    * Remove a member's vote from a card
    *
-   * @name DeleteCardsIdMembersvotedIdmember
+   * @name DeleteMembersVotedIdMember
    * @summary Remove a Member's Vote on a Card
    * @request DELETE:/cards/{id}/membersVoted/{idMember}
    * @secure
    */
-  public async deleteCardsIdMembersvotedIdmember(
+  public async deleteMembersVotedIdMember(
     id: TrelloID,
     idMember: TrelloID,
     params: IRequestParams = {}
@@ -1387,22 +1387,22 @@ export class Cards {
   /**
    * Update an item in a checklist on a card.
    *
-   * @name PutCardsIdcardChecklistIdchecklistCheckitemIdcheckitem
+   * @name UpdateChecklistCheckItemIdCardIdChecklistIdCheckItem
    * @summary Update Checkitem on Checklist on Card
    * @request PUT:/cards/{idCard}/checklist/{idChecklist}/checkItem/{idCheckItem}
    * @secure
    */
-  public async putCardsIdcardChecklistIdchecklistCheckitemIdcheckitem(
+  public async updateChecklistCheckItemIdCardIdChecklistIdCheckItem(
     idCard: TrelloID,
     idCheckItem: TrelloID,
     idChecklist: TrelloID,
     query?: {
       /** `top`, `bottom`, or a positive float */
-      pos?: PosStringOrNumber
+      pos?: IPosStringOrNumber
     },
     params: IRequestParams = {}
-  ): Promise<CheckItem> {
-    return this.client.request<CheckItem>({
+  ): Promise<ICheckItem> {
+    return this.client.request<ICheckItem>({
       path: `/cards/${idCard}/checklist/${idChecklist}/checkItem/${idCheckItem}`,
       method: 'PUT',
       query: query,
@@ -1414,12 +1414,12 @@ export class Cards {
   /**
    * Delete a checklist from a card
    *
-   * @name DeleteCardsIdChecklistsIdchecklist
+   * @name DeleteChecklistsIdChecklist
    * @summary Delete a Checklist on a Card
    * @request DELETE:/cards/{id}/checklists/{idChecklist}
    * @secure
    */
-  public async deleteCardsIdChecklistsIdchecklist(
+  public async deleteChecklistsIdChecklist(
     id: TrelloID,
     idChecklist: TrelloID,
     params: IRequestParams = {}

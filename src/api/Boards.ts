@@ -10,16 +10,16 @@
  */
 
 import {
-  Action,
-  Board,
-  BoardStars,
-  CustomField,
-  Label,
+  IAction,
+  IBoard,
+  IBoardStars,
+  ICustomField,
+  ILabel,
+  IMemberships,
+  IPlugin,
+  ITrelloList,
   MemberFields,
-  Memberships,
-  Plugin,
   TrelloID,
-  TrelloList,
   ViewFilter
 } from './data-contracts'
 import { ContentType, HttpClient, IRequestParams } from './http-client'
@@ -34,12 +34,12 @@ export class Boards {
   /**
    * Get information about the memberships users have to the board.
    *
-   * @name GetBoardsIdMemberships
+   * @name GetMemberships
    * @summary Get Memberships of a Board
    * @request GET:/boards/{id}/memberships
    * @secure
    */
-  public async getBoardsIdMemberships(
+  public async getMemberships(
     id: TrelloID,
     query?: {
       /**
@@ -69,8 +69,8 @@ export class Boards {
       member_fields?: MemberFields
     },
     params: IRequestParams = {}
-  ): Promise<Memberships> {
-    return this.client.request<Memberships>({
+  ): Promise<IMemberships> {
+    return this.client.request<IMemberships>({
       path: `/boards/${id}/memberships`,
       method: 'GET',
       query: query,
@@ -82,12 +82,12 @@ export class Boards {
   /**
    * Request a single board.
    *
-   * @name GetBoardsId
+   * @name Get
    * @summary Get a Board
    * @request GET:/boards/{id}
    * @secure
    */
-  public async getBoardsId(
+  public async get(
     id: TrelloID,
     query?: {
       /**
@@ -166,8 +166,8 @@ export class Boards {
       tags?: boolean
     },
     params: IRequestParams = {}
-  ): Promise<Board> {
-    return this.client.request<Board>({
+  ): Promise<IBoard> {
+    return this.client.request<IBoard>({
       path: `/boards/${id}`,
       method: 'GET',
       query: query,
@@ -179,12 +179,12 @@ export class Boards {
   /**
    * Update an existing board by id
    *
-   * @name PutBoardsId
+   * @name Update
    * @summary Update a Board
    * @request PUT:/boards/{id}
    * @secure
    */
-  public async putBoardsId(
+  public async update(
     id: TrelloID,
     query?: {
       /** The new name for the board. 1 to 16384 characters long. */
@@ -244,12 +244,12 @@ export class Boards {
   /**
    * Delete a board.
    *
-   * @name DeleteBoardsId
+   * @name Delete
    * @summary Delete a Board
    * @request DELETE:/boards/{id}
    * @secure
    */
-  public async deleteBoardsId(
+  public async delete(
     id: TrelloID,
     id: string,
     params: IRequestParams = {}
@@ -265,12 +265,12 @@ export class Boards {
   /**
    * Get a single, specific field on a board
    *
-   * @name GetBoardsIdField
+   * @name GetField
    * @summary Get a field on a Board
    * @request GET:/boards/{id}/{field}
    * @secure
    */
-  public async getBoardsIdField(
+  public async getField(
     id: string,
     field: string,
     params: IRequestParams = {}
@@ -286,16 +286,16 @@ export class Boards {
   /**
    * No description
    *
-   * @name GetBoardsIdActions
+   * @name GetActionsBoardId
    * @summary Get Actions of a Board
    * @request GET:/boards/{boardId}/actions
    * @secure
    */
-  public async getBoardsIdActions(
+  public async getActionsBoardId(
     boardId: string,
     query?: {
       /** The fields to be returned for the Actions. [See Action fields here](/cloud/trello/guides/rest-api/object-definitions/#action-object). */
-      fields?: Action
+      fields?: IAction
       /** A comma-separated list of [action types](/cloud/trello/guides/rest-api/action-types/). */
       filter?: string
       /**
@@ -356,17 +356,17 @@ export class Boards {
   /**
    * Get a single Card on a Board.
    *
-   * @name GetBoardsIdCardsIdcard
+   * @name GetCardsIdCard
    * @summary Get a Card on a Board
    * @request GET:/boards/{id}/cards/{idCard}
    * @secure
    */
-  public async getBoardsIdCardsIdcard(
+  public async getCardsIdCard(
     id: string,
     idCard: string,
     query?: {
       /** The fields to be returned for the Actions. [See Action fields here](/cloud/trello/guides/rest-api/object-definitions/#action-object). */
-      fields?: Action
+      fields?: IAction
       /** A comma-separated list of [action types](/cloud/trello/guides/rest-api/action-types/). */
       filter?: string
       /**
@@ -427,12 +427,12 @@ export class Boards {
   /**
    * No description
    *
-   * @name GetBoardsIdBoardstars
+   * @name GetBoardStarsBoardId
    * @summary Get boardStars on a Board
    * @request GET:/boards/{boardId}/boardStars
    * @secure
    */
-  public async getBoardsIdBoardstars(
+  public async getBoardStarsBoardId(
     boardId: string,
     query?: {
       /**
@@ -442,8 +442,8 @@ export class Boards {
       filter?: string
     },
     params: IRequestParams = {}
-  ): Promise<BoardStars[]> {
-    return this.client.request<BoardStars[]>({
+  ): Promise<IBoardStars[]> {
+    return this.client.request<IBoardStars[]>({
       path: `/boards/${boardId}/boardStars`,
       method: 'GET',
       query: query,
@@ -455,12 +455,12 @@ export class Boards {
   /**
    * Get all of the checklists on a Board.
    *
-   * @name BoardsIdChecklists
+   * @name GetChecklists
    * @summary Get Checklists on a Board
    * @request GET:/boards/{id}/checklists
    * @secure
    */
-  public async boardsIdChecklists(
+  public async getChecklists(
     id: string,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -475,12 +475,12 @@ export class Boards {
   /**
    * Get all of the open Cards on a Board.
    *
-   * @name GetBoardsIdCards
+   * @name GetCards
    * @summary Get Cards on a Board
    * @request GET:/boards/{id}/cards
    * @secure
    */
-  public async getBoardsIdCards(
+  public async getCards(
     id: string,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -495,12 +495,12 @@ export class Boards {
   /**
    * Get the Cards on a Board that match a given filter.
    *
-   * @name GetBoardsIdCardsFilter
+   * @name GetCardsFilter
    * @summary Get filtered Cards on a Board
    * @request GET:/boards/{id}/cards/{filter}
    * @secure
    */
-  public async getBoardsIdCardsFilter(
+  public async getCardsFilter(
     id: string,
     filter: 'all' | 'closed' | 'none' | 'open' | 'visible',
     params: IRequestParams = {}
@@ -516,16 +516,16 @@ export class Boards {
   /**
    * Get the Custom Field Definitions that exist on a board.
    *
-   * @name GetBoardsIdCustomfields
+   * @name GetCustomFields
    * @summary Get Custom Fields for Board
    * @request GET:/boards/{id}/customFields
    * @secure
    */
-  public async getBoardsIdCustomfields(
+  public async getCustomFields(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<CustomField[]> {
-    return this.client.request<CustomField[]>({
+  ): Promise<ICustomField[]> {
+    return this.client.request<ICustomField[]>({
       path: `/boards/${id}/customFields`,
       method: 'GET',
       secure: true,
@@ -536,16 +536,16 @@ export class Boards {
   /**
    * Get all of the Labels on a Board.
    *
-   * @name GetBoardsIdLabels
+   * @name GetLabels
    * @summary Get Labels on a Board
    * @request GET:/boards/{id}/labels
    * @secure
    */
-  public async getBoardsIdLabels(
+  public async getLabels(
     id: TrelloID,
     query?: {
       /** The fields to be returned for the Labels. */
-      fields?: Label
+      fields?: ILabel
       /**
        * The number of Labels to be returned.
        * @format int32
@@ -569,12 +569,12 @@ export class Boards {
   /**
    * Create a new Label on a Board.
    *
-   * @name PostBoardsIdLabels
+   * @name CreateLabels
    * @summary Create a Label on a Board
    * @request POST:/boards/{id}/labels
    * @secure
    */
-  public async postBoardsIdLabels(
+  public async createLabels(
     id: string,
     query: {
       /** The name of the label to be created. 1 to 16384 characters long. */
@@ -596,12 +596,12 @@ export class Boards {
   /**
    * Get the Lists on a Board
    *
-   * @name GetBoardsIdLists
+   * @name GetLists
    * @summary Get Lists on a Board
    * @request GET:/boards/{id}/lists
    * @secure
    */
-  public async getBoardsIdLists(
+  public async getLists(
     id: TrelloID,
     query?: {
       /** Filter to apply to Cards. */
@@ -620,8 +620,8 @@ export class Boards {
       fields?: string
     },
     params: IRequestParams = {}
-  ): Promise<TrelloList[]> {
-    return this.client.request<TrelloList[]>({
+  ): Promise<ITrelloList[]> {
+    return this.client.request<ITrelloList[]>({
       path: `/boards/${id}/lists`,
       method: 'GET',
       query: query,
@@ -633,12 +633,12 @@ export class Boards {
   /**
    * Create a new List on a Board.
    *
-   * @name PostBoardsIdLists
+   * @name CreateLists
    * @summary Create a List on a Board
    * @request POST:/boards/{id}/lists
    * @secure
    */
-  public async postBoardsIdLists(
+  public async createLists(
     id: TrelloID,
     query: {
       /** The name of the list to be created. 1 to 16384 characters long. */
@@ -650,8 +650,8 @@ export class Boards {
       pos?: string
     },
     params: IRequestParams = {}
-  ): Promise<TrelloList> {
-    return this.client.request<TrelloList>({
+  ): Promise<ITrelloList> {
+    return this.client.request<ITrelloList>({
       path: `/boards/${id}/lists`,
       method: 'POST',
       query: query,
@@ -663,12 +663,12 @@ export class Boards {
   /**
    * No description
    *
-   * @name GetBoardsIdListsFilter
+   * @name GetListsFilter
    * @summary Get filtered Lists on a Board
    * @request GET:/boards/{id}/lists/{filter}
    * @secure
    */
-  public async getBoardsIdListsFilter(
+  public async getListsFilter(
     id: TrelloID,
     filter: ViewFilter,
     params: IRequestParams = {}
@@ -684,12 +684,12 @@ export class Boards {
   /**
    * Get the Members for a board
    *
-   * @name GetBoardsIdMembers
+   * @name GetMembers
    * @summary Get the Members of a Board
    * @request GET:/boards/{id}/members
    * @secure
    */
-  public async getBoardsIdMembers(
+  public async getMembers(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -704,12 +704,12 @@ export class Boards {
   /**
    * Invite a Member to a Board via their email address.
    *
-   * @name PutBoardsIdMembers
+   * @name UpdateMembers
    * @summary Invite Member to Board via email
    * @request PUT:/boards/{id}/members
    * @secure
    */
-  public async putBoardsIdMembers(
+  public async updateMembers(
     id: TrelloID,
     query: {
       /**
@@ -743,12 +743,12 @@ export class Boards {
   /**
    * Add a member to the board.
    *
-   * @name PutBoardsIdMembersIdmember
+   * @name UpdateMembersIdMember
    * @summary Add a Member to a Board
    * @request PUT:/boards/{id}/members/{idMember}
    * @secure
    */
-  public async putBoardsIdMembersIdmember(
+  public async updateMembersIdMember(
     id: TrelloID,
     idMember: TrelloID,
     query: {
@@ -774,12 +774,12 @@ export class Boards {
   /**
    * No description
    *
-   * @name Boardsidmembersidmember
+   * @name DeleteMembersIdMember
    * @summary Remove Member from Board
    * @request DELETE:/boards/{id}/members/{idMember}
    * @secure
    */
-  public async boardsidmembersidmember(
+  public async deleteMembersIdMember(
     id: TrelloID,
     idMember: TrelloID,
     params: IRequestParams = {}
@@ -795,12 +795,12 @@ export class Boards {
   /**
    * Update an existing board by id
    *
-   * @name PutBoardsIdMembershipsIdmembership
+   * @name UpdateMembershipsIdMembership
    * @summary Update Membership of Member on a Board
    * @request PUT:/boards/{id}/memberships/{idMembership}
    * @secure
    */
-  public async putBoardsIdMembershipsIdmembership(
+  public async updateMembershipsIdMembership(
     id: TrelloID,
     idMembership: TrelloID,
     query: {
@@ -839,12 +839,12 @@ export class Boards {
   /**
    * Update emailPosition Pref on a Board
    *
-   * @name PutBoardsIdMyprefsEmailposition
+   * @name UpdateMyPrefsEmailPosition
    * @summary Update emailPosition Pref on a Board
    * @request PUT:/boards/{id}/myPrefs/emailPosition
    * @secure
    */
-  public async putBoardsIdMyprefsEmailposition(
+  public async updateMyPrefsEmailPosition(
     id: TrelloID,
     query: {
       /** Valid values: bottom, top. Determines the position of the email address. */
@@ -864,12 +864,12 @@ export class Boards {
   /**
    * Change the default list that email-to-board cards are created in.
    *
-   * @name PutBoardsIdMyprefsIdemaillist
+   * @name UpdateMyPrefsIdEmailList
    * @summary Update idEmailList Pref on a Board
    * @request PUT:/boards/{id}/myPrefs/idEmailList
    * @secure
    */
-  public async putBoardsIdMyprefsIdemaillist(
+  public async updateMyPrefsIdEmailList(
     id: TrelloID,
     query: {
       /** The id of an email list. */
@@ -889,12 +889,12 @@ export class Boards {
   /**
    * No description
    *
-   * @name PutBoardsIdMyPrefsShowlistguide
+   * @name UpdateMyPrefsShowListGuide
    * @summary Update showListGuide Pref on a Board
    * @request PUT:/boards/{id}/myPrefs/showListGuide
    * @secure
    */
-  public async putBoardsIdMyPrefsShowlistguide(
+  public async updateMyPrefsShowListGuide(
     id: TrelloID,
     query: {
       /** Determines whether to show the list guide. */
@@ -914,12 +914,12 @@ export class Boards {
   /**
    * No description
    *
-   * @name PutBoardsIdMyPrefsShowsidebar
+   * @name UpdateMyPrefsShowSidebar
    * @summary Update showSidebar Pref on a Board
    * @request PUT:/boards/{id}/myPrefs/showSidebar
    * @secure
    */
-  public async putBoardsIdMyPrefsShowsidebar(
+  public async updateMyPrefsShowSidebar(
     id: TrelloID,
     query: {
       /** Determines whether to show the side bar. */
@@ -939,12 +939,12 @@ export class Boards {
   /**
    * No description
    *
-   * @name PutBoardsIdMyPrefsShowsidebaractivity
+   * @name UpdateMyPrefsShowSidebarActivity
    * @summary Update showSidebarActivity Pref on a Board
    * @request PUT:/boards/{id}/myPrefs/showSidebarActivity
    * @secure
    */
-  public async putBoardsIdMyPrefsShowsidebaractivity(
+  public async updateMyPrefsShowSidebarActivity(
     id: TrelloID,
     query: {
       /** Determines whether to show sidebar activity. */
@@ -964,12 +964,12 @@ export class Boards {
   /**
    * No description
    *
-   * @name PutBoardsIdMyPrefsShowsidebarboardactions
+   * @name UpdateMyPrefsShowSidebarBoardActions
    * @summary Update showSidebarBoardActions Pref on a Board
    * @request PUT:/boards/{id}/myPrefs/showSidebarBoardActions
    * @secure
    */
-  public async putBoardsIdMyPrefsShowsidebarboardactions(
+  public async updateMyPrefsShowSidebarBoardActions(
     id: TrelloID,
     query: {
       /** Determines whether to show the sidebar board actions. */
@@ -989,12 +989,12 @@ export class Boards {
   /**
    * No description
    *
-   * @name PutBoardsIdMyPrefsShowsidebarmembers
+   * @name UpdateMyPrefsShowSidebarMembers
    * @summary Update showSidebarMembers Pref on a Board
    * @request PUT:/boards/{id}/myPrefs/showSidebarMembers
    * @secure
    */
-  public async putBoardsIdMyPrefsShowsidebarmembers(
+  public async updateMyPrefsShowSidebarMembers(
     id: TrelloID,
     query: {
       /** Determines whether to show members of the board in the sidebar. */
@@ -1014,12 +1014,12 @@ export class Boards {
   /**
    * Create a new board.
    *
-   * @name PostBoards
+   * @name Create
    * @summary Create a Board
    * @request POST:/boards/
    * @secure
    */
-  public async postBoards(
+  public async create(
     query: {
       /**
        * The new name for the board. 1 to 16384 characters long.
@@ -1118,12 +1118,12 @@ export class Boards {
   /**
    * Create a new board.
    *
-   * @name PostBoardsIdCalendarkeyGenerate
+   * @name CreateCalendarKeyGenerate
    * @summary Create a calendarKey for a Board
    * @request POST:/boards/{id}/calendarKey/generate
    * @secure
    */
-  public async postBoardsIdCalendarkeyGenerate(
+  public async createCalendarKeyGenerate(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -1138,12 +1138,12 @@ export class Boards {
   /**
    * No description
    *
-   * @name PostBoardsIdEmailkeyGenerate
+   * @name CreateEmailKeyGenerate
    * @summary Create a emailKey for a Board
    * @request POST:/boards/{id}/emailKey/generate
    * @secure
    */
-  public async postBoardsIdEmailkeyGenerate(
+  public async createEmailKeyGenerate(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -1158,12 +1158,12 @@ export class Boards {
   /**
    * No description
    *
-   * @name PostBoardsIdIdtags
+   * @name CreateIdTags
    * @summary Create a Tag for a Board
    * @request POST:/boards/{id}/idTags
    * @secure
    */
-  public async postBoardsIdIdtags(
+  public async createIdTags(
     id: TrelloID,
     query: {
       /** The id of a tag from the organization to which this board belongs. */
@@ -1183,12 +1183,12 @@ export class Boards {
   /**
    * No description
    *
-   * @name PostBoardsIdMarkedasviewed
+   * @name CreateMarkedAsViewed
    * @summary Mark Board as viewed
    * @request POST:/boards/{id}/markedAsViewed
    * @secure
    */
-  public async postBoardsIdMarkedasviewed(
+  public async createMarkedAsViewed(
     id: TrelloID,
     params: IRequestParams = {}
   ): Promise<void> {
@@ -1203,16 +1203,16 @@ export class Boards {
   /**
    * Get the enabled Power-Ups on a board
    *
-   * @name GetBoardsIdBoardplugins
+   * @name GetBoardPlugins
    * @summary Get Enabled Power-Ups on Board
    * @request GET:/boards/{id}/boardPlugins
    * @secure
    */
-  public async getBoardsIdBoardplugins(
+  public async getBoardPlugins(
     id: TrelloID,
     params: IRequestParams = {}
-  ): Promise<Plugin[]> {
-    return this.client.request<Plugin[]>({
+  ): Promise<IPlugin[]> {
+    return this.client.request<IPlugin[]>({
       path: `/boards/${id}/boardPlugins`,
       method: 'GET',
       secure: true,
@@ -1223,13 +1223,13 @@ export class Boards {
   /**
    * Enable a Power-Up on a Board
    *
-   * @name PostBoardsIdBoardplugins
+   * @name CreateBoardPlugins
    * @summary Enable a Power-Up on a Board
    * @request POST:/boards/{id}/boardPlugins
    * @deprecated
    * @secure
    */
-  public async postBoardsIdBoardplugins(
+  public async createBoardPlugins(
     id: TrelloID,
     query?: {
       /** The ID of the Power-Up to enable */
@@ -1249,13 +1249,13 @@ export class Boards {
   /**
    * Disable a Power-Up on a board
    *
-   * @name DeleteBoardsIdBoardplugins
+   * @name DeleteBoardPluginsIdPlugin
    * @summary Disable a Power-Up on a Board
    * @request DELETE:/boards/{id}/boardPlugins/{idPlugin}
    * @deprecated
    * @secure
    */
-  public async deleteBoardsIdBoardplugins(
+  public async deleteBoardPluginsIdPlugin(
     id: TrelloID,
     idPlugin: TrelloID,
     params: IRequestParams = {}
@@ -1271,12 +1271,12 @@ export class Boards {
   /**
    * List the Power-Ups on a board
    *
-   * @name GetBoardIdPlugins
+   * @name GetPlugins
    * @summary Get Power-Ups on a Board
    * @request GET:/boards/{id}/plugins
    * @secure
    */
-  public async getBoardIdPlugins(
+  public async getPlugins(
     id: TrelloID,
     query?: {
       /**
@@ -1286,8 +1286,8 @@ export class Boards {
       filter?: 'enabled' | 'available'
     },
     params: IRequestParams = {}
-  ): Promise<Plugin> {
-    return this.client.request<Plugin>({
+  ): Promise<IPlugin> {
+    return this.client.request<IPlugin>({
       path: `/boards/${id}/plugins`,
       method: 'GET',
       query: query,
